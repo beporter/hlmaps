@@ -11,6 +11,7 @@
 
 # First refresh the docs in the HTML tree
 cd /home/sources/hlmaps
+chown -R smccrory.users *
 cp -f CHANGELOG CONTRIBUTING CONTRIBUTORS INSTALL LICENSE README TODO hlmaps.conf.distrib hlmaps.cron hlmaps.pl INSTALL.MySQL ../hlmaps-htdocs/
 
 # Now prepare the distribution directory
