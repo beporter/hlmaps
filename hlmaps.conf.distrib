@@ -8,43 +8,65 @@
 ###############################################################################
 # CVS $Id$
 ###############################################################################
-
+#
 # ** MODIFY THESE FOR YOUR SYSTEM **
+#
+#-----------------------------------------------------------------------------
+# Half-Life server constants - remember trailing "/" or "\" on DIRs and URLs!
+SERVER_BASE_DIR             = /usr/bin/half-life/cstrike/
+SERVER_MAP_DIR              = /usr/bin/half-life/cstrike/maps/
+SERVER_LOG_DIR              = /usr/bin/half-life/cstrike/logs/
+MAP_EXTENSION               = bsp
+MAPCYCLE                    = /usr/bin/half-life/cstrike/mapcycle.txt
 
-# Half-Life server constants
-SERVER_BASE_DIR     = /usr/bin/half-life/cstrike/
-SERVER_MAP_DIR      = /usr/bin/half-life/cstrike/maps/
-SERVER_LOG_DIR      = /usr/bin/half-life/cstrike/logs/
-MAP_EXTENSION       = bsp
-MAPCYCLE            = /usr/bin/half-life/cstrike/mapcycle.txt
+#-----------------------------------------------------------------------------
+# Image file constants - remember trailing "/" or "\" on DIRs and URLs!
+IMAGES_DIR                  = /home/httpd/html/images/Maps/halflife/
+IMAGES_URL                  = /images/Maps/halflife/
 
-# Image file constants
-IMAGES_DIR          = /home/httpd/html/images/Maps/halflife/
-IMAGES_URL          = /images/Maps/halflife/
+#-----------------------------------------------------------------------------
+# Download file constants - remember trailing "/" or "\" on DIRs and URLs!
+DOWNLOAD_DIR                = /home/ftp/pub/Games/cstrike/maps/
+DOWNLOAD_EXT                = zip
+DOWNLOAD_URL                = /download/Games/cstrike/maps/
 
-# Download file constants
-DOWNLOAD_DIR        = /home/ftp/pub/Games/cstrike/maps/
-DOWNLOAD_URL        = /download/Games/cstrike/maps/
-
-# Page appearance preferences
+#-----------------------------------------------------------------------------
+# Appearance preferences
 #    Valid colors are White Silver Grey Black Red Maroon Purple Fuschia Lime
 #                     Yellow Olive Green Blue Navy Teal Aqua
 #
-PAGE_HEADING        = HLmaps Server Map Listing
-PAGE_BG_URL         = 
-PAGE_BG_COLOR       = Black 
-PAGE_TEXT_COLOR     = Yellow
-PAGE_LINK_COLOR     = Lime
-PAGE_V_LINK_COLOR   = Aqua
-PAGE_A_LINK_COLOR   = Green
-
-# Table appearance preferences
-#    Valid colors are White Silver Grey Black Red Maroon Purple Fuschia Lime
-#                     Yellow Olive Green Blue Navy Teal Aqua
-#
+PAGE_BG_URL                 = 
+PAGE_BG_COLOR               = Black 
+PAGE_TEXT_COLOR             = Yellow
+PAGE_LINK_COLOR             = Lime
+PAGE_V_LINK_COLOR           = Aqua
+PAGE_A_LINK_COLOR           = Green
 TABLE_BORDER_LIGHT_COLOR    = Aqua
 TABLE_BORDER_DARK_COLOR     = Green
 TABLE_NORM_HEAD_COLOR       = Purple
 TABLE_SORT_HEAD_COLOR       = Fuchsia
+
+#-----------------------------------------------------------------------------
+# Language preferences - use these to internationalize HLmaps
+PAGE_HEADING                = HLmaps Server Map Listing
+PAGE_SUBHEADING             = Click the column headings to sort by them
+PAGE_MAPCOUNT_PRE           = Total of
+PAGE_MAPCOUNT_SUF           = maps found
+
+TABLE_MAPNAME_COLUMN        = Map Name
+TABLE_IMAGE_COLUMN          = Image
+TABLE_POPULARITY_COLUMN     = Popularity
+TABLE_MAPCYCLE_COLUMN       = In Map Cycle
+TABLE_SIZE_COLUMN           = Size
+TABLE_MODDATE_COLUMN        = Mod Date
+
+TABLE_IMAGE_NO              = Image Not Available
+TABLE_POPULARITY_COUNT_PRE  = Played
+TABLE_POPULARITY_COUNT_SUF  = time(s)
+TABLE_POPULARITY_NEVER      = Never Played
+TABLE_MAPCYCLE_YES          = In Map Cycle
+TABLE_MAPCYCLE_NO           = No
+
+DATE_FORMAT                 = # Unused for now! #
 
 ###############################################################################

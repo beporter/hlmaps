@@ -44,7 +44,7 @@ my $CONF_FILE           = "/etc/hlmaps.conf";
 ###################### GLOBAL DEVELOPMENT CONSTANTS ###########################
 
 # Development constants - please don't mess with these
-my $VERSION             = "0.92, July 22, 2000";
+my $VERSION             = "0.93, July 24, 2000";
 my $AUTHOR_NAME         = "Scott McCrory";
 my $AUTHOR_EMAIL        = "scott\@mccrory.com";
 my $HOME_PAGE           = "http://hlmaps.sourceforge.net";
@@ -158,8 +158,8 @@ sub get_map_details {
         
         ++$count;                       # Increment the map counter
         $shortname = $filename;         # Strip off the extension
-        $shortname =~/(\w+)./;
-        $shortname = $1;
+        $shortname =~/(\w+)./;          # and untaint it
+        $shortname = $1;                # 
     
         # Get the map details
         $inode = stat("$prefs{SERVER_MAP_DIR}" . "$filename"); 
@@ -172,7 +172,7 @@ sub get_map_details {
         $mapcycle{"$shortname"} = "#na#";
         
         # Get the map's corresponding download link if it exists
-        $dlfilename = "$prefs{DOWNLOAD_DIR}" . "$shortname" . ".zip";
+        $dlfilename = "$prefs{DOWNLOAD_DIR}" . "$shortname.$prefs{DOWNLOAD_EXT}";
         if ($dlfilename && -e $dlfilename) {
             $download{"$shortname"} = $dlfilename;
         }
@@ -225,7 +225,7 @@ sub print_page_header {
     print header(), start_html("$prefs{PAGE_HEADING}");
     print "<body background=\"$prefs{PAGE_BG_URL}\" bgcolor=\"$prefs{PAGE_BG_COLOR}\" text=\"$prefs{PAGE_TEXT_COLOR}\" link=\"$prefs{PAGE_LINK_COLOR}\" vlink=\"$prefs{PAGE_V_LINK_COLOR}\" alink=\"$prefs{PAGE_A_LINK_COLOR}\">";
     print h1("<CENTER> $prefs{PAGE_HEADING} </CENTER>");
-    print h3("<CENTER><I> Click the column headings to sort by them </I></CENTER><BR>");
+    print h3("<CENTER><I> $prefs{PAGE_SUBHEADING} </I></CENTER><BR>");
 }
 
 #------------------------------------------------------------------------------
@@ -243,12 +243,12 @@ sub print_table_header {
     # Print the table header
     print "<table border=\"1\" bordercolordark=\"$prefs{TABLE_BORDER_LIGHT_COLOR}\" bordercolorlight=\"$prefs{TABLE_BORDER_DARK_COLOR}\" cellspacing=\"0\" cellpadding=\"3\" align=\"center\">";
     print "<tr>";     
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapname&order=$inverse\"><b>Map Name</b></a></td>\n";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=image&order=$inverse\"><b>Image</b></a></td>\n";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=popularity&order=$inverse\"><b>Times Played</b></a></td>\n";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapcycle&order=$inverse\"><b>In Map Cycle</b></a></td>\n";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=size&order=$inverse\"><b>Size</b></a></td>\n";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=moddate&order=$inverse\"><b>Mod Date</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapname&order=$inverse\"><b>$prefs{TABLE_MAPNAME_COLUMN}</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=image&order=$inverse\"><b>$prefs{TABLE_IMAGE_COLUMN}</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=popularity&order=$inverse\"><b>$prefs{TABLE_POPULARITY_COLUMN}</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapcycle&order=$inverse\"><b>$prefs{TABLE_MAPCYCLE_COLUMN}</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=size&order=$inverse\"><b>$prefs{TABLE_SIZE_COLUMN}</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=moddate&order=$inverse\"><b>$prefs{TABLE_MODDATE_COLUMN}</b></a></td>\n";
     print "</tr>\n";
 }
 
@@ -320,32 +320,34 @@ sub print_map_table {
  
         # Print the map's name (and corresponding download link if present)
         if ($download{"$hlmap"} && $download{"$hlmap"} ne "#na#" && -e $download{"$hlmap"}) {
-            print "<td align=\"center\"><a href=\"$prefs{DOWNLOAD_URL}$hlmap.zip\"><B>$hlmap</B></a></td>\n";
+            print "<td align=\"center\"><a href=\"$prefs{DOWNLOAD_URL}$hlmap.$prefs{DOWNLOAD_EXT}\"><B>$hlmap</B></a></td>\n";
         } else {
             print "<td align=\"center\"><B>$hlmap</B></td>\n";
         }
  
         # If there's a corresponding image file, display it.
         if ($image{"$hlmap"} && $image{"$hlmap"} ne "#na#") {
-            print "<td align=\"center\"><img src=\"$image{\"$hlmap\"}\" ALT=\"$hlmap\" WIDTH=212 HEIGHT=160></td>\n";
+            if ($download{"$hlmap"} && $download{"$hlmap"} ne "#na#" && -e $download{"$hlmap"}) {
+                print "<td align=\"center\"><a href=\"$prefs{DOWNLOAD_URL}$hlmap.$prefs{DOWNLOAD_EXT}\"><img src=\"$image{\"$hlmap\"}\" ALT=\"$hlmap\" WIDTH=212 HEIGHT=160 BORDER=0></a></td>\n";
+            } else {
+                print "<td align=\"center\"><img src=\"$image{\"$hlmap\"}\" ALT=\"$hlmap\" WIDTH=212 HEIGHT=160></td>\n";
+            }
         } else {
-            print "<td align=\"center\"><i>Image not available</i></td>\n";
+            print "<td align=\"center\"><i>$prefs{TABLE_IMAGE_NO}</i></td>\n";
         }
  
         # Now print image's popularity (number of times run on the server)
         if ($popularity{"$hlmap"} > 0) {
-            print "<td align=\"center\"><B>Played $popularity{\"$hlmap\"} time";
-            if ( $popularity{"$hlmap"} > 1 ) { print "s"; }
-            print "</B></td>\n";
+            print "<td align=\"center\"><B>$prefs{TABLE_POPULARITY_COUNT_PRE} $popularity{\"$hlmap\"} $prefs{TABLE_POPULARITY_COUNT_SUF}</B></td>\n";
         } else {
-            print "<td align=\"center\"><i>never</i></td>\n";
+            print "<td align=\"center\"><i>$prefs{TABLE_POPULARITY_NEVER}</i></td>\n";
         }
 
         # Print whether this map is in the server's mapcycle.txt or not
         if ( $mapcycle{"$hlmap"} && $mapcycle{"$hlmap"} ne "#na#") {
-            print "<td align=\"center\"><b>In Mapcycle</b></td>\n";
+            print "<td align=\"center\"><b>$prefs{TABLE_MAPCYCLE_YES}</b></td>\n";
         } else {
-            print "<td align=\"center\"><i>no</i></td>\n";
+            print "<td align=\"center\"><i>$prefs{TABLE_MAPCYCLE_NO}</i></td>\n";
         }
  
         # Print map's file size
@@ -372,7 +374,7 @@ sub print_table_footer {
 
 #------------------------------------------------------------------------------
 sub print_page_footer {
-    print "<BR><CENTER><B>Total of $count maps found</B><BR><BR>";
+    print "<BR><CENTER><B>$prefs{PAGE_MAPCOUNT_PRE} $count $prefs{PAGE_MAPCOUNT_SUF}</B><BR><BR>";
     print "Generated by <a href=\"$HOME_PAGE\"><B>hlmaps.pl</B></a> $VERSION<BR>";
     print "Written by <a href=\"MAILTO:$AUTHOR_EMAIL\">$AUTHOR_NAME</a></CENTER><BR>";
     print end_html . "\n";

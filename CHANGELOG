@@ -13,6 +13,17 @@
 - bugfix, + enhancement, * contrib, = RELEASE
 ---------------------------------------------
 
+= 0.93 07/24/2000
+  * Thanks to Martin Hömberg for ideas behind this release's improvements!
+  + Confirmed NT portability - admins will just have to remove the "-T" on the
+    script's "shebang" line to make it work under ActiveState Perl.  Martin
+    gets big kudos for testing and offering solutions for this.
+  + Internationalized HLmaps output - use the .conf file to make it print the
+    output in your language
+  + Map image now links to the download package if one exists.
+  + Added .conf option for different download extension in case you make your
+    maps downloads available in .arj, .arc, .gz, etc.
+
 = 0.92 07/22/2000
   - Fixed problem where a DOS-edited mapcycle with carriage returns would
     prevent HLmaps from understanding it correctly.  Should work fine now.
