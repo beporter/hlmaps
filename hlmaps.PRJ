@@ -48,18 +48,15 @@ Project Wordfile=
 [File View]
 Current Select=Open Files\
 
-[Files]
-0=F:\home\sources\hlmaps\hlmaps.pl
-
 [Open Files]
 Open File0=F:\home\sources\hlmaps\hlmaps.conf.distrib
 Open File Pos0=1634
 Open File Line0=567
 Open File Window Pos0=0,1,-1,-1,-4,-23,0,0,609,416
 Open File1=F:\home\sources\hlmaps\hlmaps.cron
-Open File Pos1=1577
+Open File Pos1=12925
 Open File Line1=0
-Active File Index=9
+Active File Index=10
 Open File Window Pos1=0,1,-1,-1,-4,-23,22,22,631,438
 Open File2=F:\home\sources\hlmaps\TODO
 Open File Pos2=0
@@ -90,8 +87,16 @@ Open File Pos8=949
 Open File Line8=243
 Open File Window Pos8=0,1,-1,-1,-4,-23,0,0,609,416
 Open File9=F:\home\sources\hlmaps\hlmaps.pl
-Open File Pos9=34229
-Open File Line9=32624
-Open File Window Pos9=2,3,-1,-1,-4,-23,0,0,543,419
-Open File10=
+Open File Pos9=12184
+Open File Line9=0
+Open File Window Pos9=0,1,-1,-1,-4,-23,0,0,543,419
+Open File10=F:\home\sources\hlmaps\INSTALL.MySQL
 Active File Display Mode=3
+Open File Pos10=3295
+Open File Line10=0
+Open File Window Pos10=2,3,-1,-1,-4,-23,22,22,560,441
+Open File11=
+
+[Files]
+0=F:\home\sources\hlmaps\hlmaps.pl
+1=F:\home\sources\hlmaps\INSTALL.MySQL

@@ -21,10 +21,10 @@ want to run depends on it.  IF YOU ARE DEVELOPING FOR THIS CAPABILITY, please
 email me at smccrory@users.sourceforge.net with any questions, suggestions,
 etc. as I'm very interested in seeing how this plays out.
 
-I highly recommend getting HLmaps to work with just the text data file first
-before switching to MySQL to make resolving any problems easier.  I'm pretty
-new to databases and MySQL so if one of you more experienced blokes finds
-something I missed, please let me know.
+You really must get HLmaps to work with just the text data file first before
+switching to MySQL to make resolving any problems easier.  I'm pretty new to
+databases and MySQL so if one of you more experienced blokes finds something
+I missed, please let me know.
 
 Set up the Database
 -------------------
@@ -48,6 +48,15 @@ Change the DATA_LOCATION variable in the hlmaps.conf file to "mysql" and check
 to make sure the other MYSQL_* variables are suitable.  This will tell
 hlmaps.cron and hlmaps.pl to use MySQL instead of the text data file for
 interrim storage.
+
+Unremark the "use DBI;" Lines
+-----------------------------
+Well, first you must have the Perl DBI installed, and then go into hlmaps.pl
+and hlmaps.cron and unremark the two "use DBI;" lines in each of those files.
+Also remark the "print" function just below those lines to get rid of the
+message.  Sorry I had to do it this way - if anyone out there knows how to get
+DBI to load at run-time without spitting out warnings, please let me know and
+I'll make this part cleaner.
 
 Test and Troubleshoot
 ---------------------

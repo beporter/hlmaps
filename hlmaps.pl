@@ -47,7 +47,7 @@ my $CONF_FILE           = "/etc/hlmaps.conf";
 ###################### GLOBAL DEVELOPMENT CONSTANTS ###########################
 
 # Development constants - please don't mess with these
-my $VERSION             = "0.96, October 10, 2000";
+my $VERSION             = "1.0, October 23, 2000";
 my $AUTHOR_NAME         = "Scott McCrory";
 my $AUTHOR_EMAIL        = "smccrory\@users.sourceforge.net";
 my $HOME_PAGE           = "http://hlmaps.sourceforge.net";
@@ -263,7 +263,8 @@ sub get_text_map_details {
 sub get_mysql_map_details {
     # Open up HLmaps database and pull out the map details
 
-    use DBI;
+#    use DBI;
+print "Uncomment the 'use DBI;' line in sub get_mysql_map_details to enable DB features!\n";
 
     my $l_mapname;
     my $l_textfile;
