@@ -40,7 +40,7 @@
     image, stats, etc.  This now serves as the jump-off point for downloads
     instead of direct links from the main results table.
   + Added drop-down widget to let user change number of maps displayed/page.
-  + Added documentation to the .conf file to make it clearer
+  + Added documentation to the .conf file to make it clearer.
 
 = 0.93 07/25/2000
   * Thanks to Martin Hömberg for many ideas behind this release...
