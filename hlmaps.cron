@@ -334,7 +334,7 @@ print "Uncomment the 'use DBI;' line in sub output_mysql_data to enable DB featu
 sub mysql_bail_out {
     # Print the full text error messages for any database problems  
     my ($message) = shift;
-    die "$message\nError $DBI::err ($DBI::errstr)\n";
+#    die "$message\nError $DBI::err ($DBI::errstr)\n";
 }
 
 ###############################################################################

@@ -322,6 +322,7 @@ sub mysql_bail_out {
     die "$message\nError $DBI::err ($DBI::errstr)\n";
 }
 
+#------------------------------------------------------------------------------
 sub get_realtime_server_status {
       
     # Copied from Rod May's kkrcon proglet for QW/Q2/Q3/HL (and others :)

@@ -49,14 +49,14 @@ to make sure the other MYSQL_* variables are suitable.  This will tell
 hlmaps.cron and hlmaps.pl to use MySQL instead of the text data file for
 interrim storage.
 
-Unremark the "use DBI;" Lines
------------------------------
+Unremark the "use DBI;" Lines and the $DBI::err Line
+----------------------------------------------------
 Well, first you must have the Perl DBI installed, and then go into hlmaps.pl
 and hlmaps.cron and unremark the two "use DBI;" lines in each of those files.
 Also remark the "print" function just below those lines to get rid of the
-message.  Sorry I had to do it this way - if anyone out there knows how to get
-DBI to load at run-time without spitting out warnings, please let me know and
-I'll make this part cleaner.
+message and the "$DBI::err" line near the end of hlmaps.cron.  Sorry I had to
+do it this way - I haven't had time to place the SQL functions in a separate
+(conditionally loaded) module.
 
 Test and Troubleshoot
 ---------------------
