@@ -339,8 +339,12 @@ sub print_nav_bar {
     my $pages;      # Number of pages as calculated
     my $i;          # Loop counter
 
-    $pages = int($count / $params{mapsperpage}) + 1;    # Calculate total pages
-
+    if ( $count % $params{mapsperpage} != 0 ) {
+      $pages = int( $count / $params{mapsperpage} ) + 1;      #Calculate total pages (last page not full)
+    } else {
+      $pages = int( $count / $params{mapsperpage} );          #Calculate total pages (last page full)
+    }
+    
     if ( $pages > 1 ) {
         print "<TABLE border=\"1\" bordercolordark=\"$prefs{TABLE_BORDER_LIGHT_COLOR}\" bordercolorlight=\"$prefs{TABLE_BORDER_DARK_COLOR}\" cellspacing=\"0\" cellpadding=\"3\" ALIGN=\"CENTER\">\n";
         print "<TR>";
