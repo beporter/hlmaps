@@ -1,0 +1,45 @@
+###############################################################################
+#                                                                             #
+# hlmaps.conf.distrib   - The configuration file for HLmaps                   #
+#                       - Copyright Scott McCrory                             #
+#                       - Distributed under the GPL terms - see docs for info #
+#                       - http://hlmaps.sourceforge.net                       #
+#                                                                             #
+###############################################################################
+# CVS $Id$
+###############################################################################
+
+# ** MODIFY THESE FOR YOUR SYSTEM **
+
+# Half-Life server constants
+SERVER_BASE_DIR     = /usr/bin/half-life/cstrike/
+SERVER_MAP_DIR      = /usr/bin/half-life/cstrike/maps/
+SERVER_LOG_DIR      = /usr/bin/half-life/cstrike/logs/
+MAPCYCLE            = /usr/bin/half-life/cstrike/mapcycle.txt
+
+# Image file constants
+IMAGES_DIR          = /home/httpd/html/images/Maps/halflife/
+IMAGES_URL          = /images/Maps/halflife/
+
+# Download file constants
+DOWNLOAD_DIR        = /home/ftp/pub/Games/cstrike/maps/
+DOWNLOAD_URL        = /download/Games/cstrike/maps/
+
+# Page appearance preferences
+PAGE_HEADING        = HLmaps Server Map Listing
+PAGE_BG_IMG         = 
+PAGE_BG_COLOR       = #000033
+PAGE_TEXT_COLOR     = #ffff99
+PAGE_LINK_COLOR     = #ffcc00
+PAGE_V_LINK_COLOR   = #999966
+PAGE_A_LINK_COLOR   = #66ff00
+BODY = <body background=\"$PAGE_BG_IMG\" bgcolor=\"$PAGE_BG_COLOR\" text=\"$PAGE_TEXT_COLOR\" link=\"$PAGE_LINK_COLOR\" vlink=\"$PAGE_V_LINK_COLOR\" alink=\"$PAGE_A_LINK_COLOR\">
+
+# Table appearance preferences
+TABLE = <table border=\"1\" bordercolordark=\"$TABLE_BORDER_LIGHT_COLOR\" bordercolorlight=\"$TABLE_BORDER_DARK_COLOR\" cellspacing=\"0\" cellpadding=\"3\" align=\"center\">
+TABLE_BORDER_LIGHT_COLOR    = #999933
+TABLE_BORDER_DARK_COLOR     = #cccc66
+TABLE_NORM_HEAD_COLOR       = #66CCFF
+TABLE_SORT_HEAD_COLOR       = #00CCFF
+
+###############################################################################

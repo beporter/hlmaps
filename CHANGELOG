@@ -1,0 +1,22 @@
+###############################################################################
+#                                                                             #
+# CHANGELOG - List of changes HLmaps has undergone under each version         #
+#       - Copyright Scott McCrory as part of the HLmaps distribution          #
+#       - Distributed under the GNU Public License - see docs for more info   #
+#       - http://hlmaps.sourceforge.net                                       #
+#                                                                             #
+###############################################################################
+# CVS $Id$
+###############################################################################
+
+---------------------------------------------
+- bugfix, + enhancement, * contrib, = RELEASE
+---------------------------------------------
+
+= 0.91 07/21/2000
+  - Fixed problem where cat | grep could only handle up to 1500 line files
+    by using Perl internal file access -- Glen Muras
+  + Tested OK with Apache/mod_perl's "PerlRun" compatability mode.
+
+= 0.90 07/20/2000 -- Scott (smccrory@users.syshealth.net)
+  First public release

@@ -1,0 +1,48 @@
+###############################################################################
+#                                                                             #
+# INSTALL   - How to install and upgrade HLmaps on your server                #
+#           - Copyright Scott McCrory as part of the HLmaps distribution      #
+#           - Distributed under the GNU Public License - see docs for info    #
+#           - http://hlmaps.sourceforge.net                                   #
+#                                                                             #
+###############################################################################
+# CVS $Id$
+###############################################################################
+
+INSTALLING
+----------
+First install all of the JPG images from the hlmaps_images package into a
+web-accessable directory.  If you already (or plan to) use the hlds_ld.cgi or
+hlstat.pl scripts then make all of them point to the same directory to make it
+better to maintain.
+
+The configuration part is a little more cumbersome than it will be in the
+next version, which will use a separate /etc/hlmaps.conf file.  But for now
+you need to edit the hlmaps.pl script and change the GLOBAL CONSTANTS section
+to match your installation.
+
+Then copy the hlmaps.pl script into your web server's cgi directory
+(usually /home/httpd/cgi-bin/) and assign it the same owner and group
+assignments and file permissions that you usually use for your other CGI
+scripts.  For example, I run my Apache daemon under an "httpd" user and an
+"httpd" group.  So I do the following:
+
+cp hlmaps.pl /home/httpd/cgi-bin/
+chown httpd.httpd /home/httpd/cgi-bin/hlmaps.pl
+chmod 555 /home/httpd/cgi-bin/hlmaps.pl
+
+Now fire up a browser and test the script by going to
+http://my.server.com/cgi-bin/hlmaps.pl and see if you get output.  If the images
+don't show up, then check the GLOBAL CONSTANTS settings.  If it doesn't find
+maps, then check the GLOBAL CONSTANTS settings.  If it doesn't detect mapcycle
+inclusion, then check the GLOBAL CONSTANTS settings.  Get it? :-)
+
+Let me know if you have problems AFTER you've checked things over several times
+and please be specific about what you see and what you've tried.  Im VERY
+interested in making this work on all variants of Linux and possibly NT/2000,
+so please also let me know about your successes!
+
+--
+Hope you enjoy!
+Scott and the HLmaps development team.
+

@@ -1,0 +1,38 @@
+###############################################################################
+#                                                                             #
+# CONTRIBUTING - How to help with the development of HLmaps                   #
+#       - Copyright Scott McCrory as part of the HLmaps distribution          #
+#       - Distributed under the GNU Public License - see docs for more info   #
+#       - http://hlmaps.sourceforge.net                                       #
+#                                                                             #
+###############################################################################
+# CVS $Id$
+###############################################################################
+
+IMAGE CONTRIBUTIONS
+-------------------
+    Probably the one thing I need the most help with is map images.  I'll never
+have time to keep up with all the new maps for all the Half-Life mods out there
+and so I really could use your help.  Please note that hlmon.pl and hlds_ld.cgi
+script users will also benefit from your contributions, so you're killing
+three birds with one stone!
+    To contribute map images, just take a good screen shot (F5 key for most
+people) at one of the most prominent (usually outdoor) place in the map.  Then,
+look in your half-life directory for a .BMP file and if necessary brighten it
+and increase the contrast, then change the image size to 212x160 and finally
+sharpen the image a bit.  Save it to "mapname.jpg" and send it to me via email
+at smccrory@users.sourceforge.net (please zip up a batch if you have more than
+a few).  Also make the image quality as good as can be reasonably expected
+to make it easy for visitors to identify a map by sight without going blind.
+
+CODE CONTRIBUTIONS
+------------------
+    If you just want to make suggestions about future versions of HLmaps, then
+please use the surveys at the project home page (see above).  On the other
+hand, I'm always appreciative of coding help since I'm still relatively new
+at Perl.  Take a look through the code and talk to me about your intentions
+and if there's a fit, I'll add you to the developer list and you'll be able
+to use the CVS tree and other project tools!
+
+--
+Scott McCrory (smccrory@users.sourceforge.net)

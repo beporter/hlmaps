@@ -1,0 +1,26 @@
+###############################################################################
+#                                                                             #
+# CONTRIBUTORS - The wonderful people who have helped with HLmaps' development#
+#       - Copyright Scott McCrory as part of the HLmaps distribution          #
+#       - Distributed under the GNU Public License - see docs for more info   #
+#       - http://hlmaps.sourceforge.net                                       #
+#                                                                             #
+###############################################################################
+# CVS $Id$
+###############################################################################
+
+TESTERS and DEBUGGERS
+   - Kevin Johnson  (first tester)
+   - Glen Muras     (FreeBSD 3.3 certification)
+   
+CODE CONTRIBUTIONS
+   - Glen Muras     (Fix for big log files)
+
+DOCUMENTATION
+   -
+
+MAP IMAGES
+   -
+
+--
+Scott McCrory <smccrory@users.sourceforge.com>
