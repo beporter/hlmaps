@@ -15,19 +15,22 @@ TESTERS and DEBUGGERS
    - Martin Hoemberg    (Windows NT testing)
    - Justin Harris      (base-0/1 printing bug)
    - Matthew McClendon  (logfile scanning bug)
+   - Jon Adams          (default settings bug)
+   - Andrew Brampton    (SSI testing)
    
 CODE CONTRIBUTIONS
    - Glen Muras         (Fix for big log files)
    - Martin Hoemberg    (Fixes for NT particulars)
-   - Justin Harris      (Misc. appearance improvements)
-
-DOCUMENTATION
-   -
+   - Justin Harris      (Misc. HTML improvements, kill thresholds)
+   - Ludwig Nussel      (Fix to handle DOS-formatted mapcycle.txt correctly)
 
 MAP IMAGES
    - Rob Abbott
-   - Danny ??
+   - Danny Collings
    - David Wyble
+   - Ron Yacketta
+   - Mike Sessions
+   - Matt Chambers
 
 --
 Scott McCrory <smccrory@users.sourceforge.com>

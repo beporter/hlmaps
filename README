@@ -47,7 +47,7 @@ REQUIRES
 --------
   + Linux, FreeBSD or WinNT
   + Perl 5.0+  (Ships with nearly every *nix distribution) or ActiveState's Perl
-       for WinNT
+       for WinNT)
   + Web server supporting CGI (Apache extensively tested)
   + Half-Life Server software (well duh!)
 

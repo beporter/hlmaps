@@ -13,9 +13,9 @@ IMAGE CONTRIBUTIONS
 -------------------
     Probably the one thing I need the most help with is map images.  I'll never
 have time to keep up with all the new maps for all the Half-Life mods out there
-and so I really could use your help.  Please note that hlmon.pl and hlds_ld.cgi
-script users will also benefit from your contributions, so you're killing
-three birds with one stone!
+and so I really could use your help.  Please note that hlmon.pl, hlds_ld.cgi
+and csserverstats script users will also benefit from your contributions, so
+you're killing four birds with one stone!
     To contribute map images, just take a good screen shot (F5 key for most
 people) at one of the most prominent (usually outdoor) place in the map.  Then,
 look in your half-life directory for a .BMP file and if necessary brighten it
@@ -24,7 +24,8 @@ sharpen the image a bit.  Save it to "mapname.jpg" and send it to me via email
 at smccrory@users.sourceforge.net (please zip up a batch if you have more than
 a few).  Also, please make the image quality as good as can be reasonably
 expected to make it easy for visitors to identify a map by sight without going
-blind.
+blind.  If you don't want the hassle of tidying up the images but are still
+willing to grab map shots, then just let me know and we'll split up the job.
 
 CODE CONTRIBUTIONS
 ------------------

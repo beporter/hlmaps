@@ -1,3 +1,6 @@
+# This file is for development only - it's to make it easy to test
+# major code revisions for compile errors.
+
 clear
 
 chown -R smccrory.users /home/sources/hlmaps

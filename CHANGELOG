@@ -13,6 +13,22 @@
 - bugfix, + enhancement, * contrib, = RELEASE
 ---------------------------------------------
 
+= 0.95 09/01/2000
+  - Fixed bug where default maps/page wasn't being read (handled) correctly
+    from hlmaps.conf file.
+  -*Improved resilience to mapcycle.txt files that have extra (DOS) characters
+    in them - thanks Ludwig Nussel for the regex!
+  + Implemented optional kill thresholds for map popularity count calculation.
+    This is to allow admins to discount maps that had fewer than a certain
+    number of kills to help elminate maps that didn't have much *real* activity
+    on them.
+  + Added optional MySQL support as the storage meduim for the interrim data.
+    This should give others the ability to write applications which will use
+    the data collected by hlmaps.cron.  Go to it developers!
+  + Added optional integration with qstat to display which map is currently in
+    play and also added a link to hlds_ld.cgi or csserverstats, etc. for real-
+    time server status screen. 
+
 = 0.94 08/05/2000
   * Thanks to Justin Harris, Matthew McClendon and Matt Chambers for many
     ideas behind this release...

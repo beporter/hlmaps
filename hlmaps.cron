@@ -23,7 +23,7 @@ my $CONF_FILE           = "/etc/hlmaps.conf";
 ###################### GLOBAL DEVELOPMENT CONSTANTS ###########################
 
 # Development constants - please don't mess with these
-my $VERSION             = "0.94, August 5, 2000";
+my $VERSION             = "0.95, September 1, 2000";
 my $AUTHOR_NAME         = "Scott McCrory";
 my $AUTHOR_EMAIL        = "smccrory\@users.sourceforge.net";
 my $HOME_PAGE           = "http://hlmaps.sourceforge.net";
@@ -78,8 +78,9 @@ sub set_default_values {
     $prefs{TABLE_NORM_HEAD_COLOR}       = "Navy";
     $prefs{TABLE_SORT_HEAD_COLOR}       = "Blue";
     
-    $prefs{DEFAULT_MAPS_PER_PAGE}       = 20;
-    
+    $prefs{DEFAULT_MAPS_PER_PAGE}       = "20";
+    $prefs{MAP_KILL_THRESHOLD}          = "0";
+  
     $prefs{PAGE_HEADING}                = "HLmaps Server Map Listing";
     $prefs{PAGE_SUBHEADING}             = "Click the column headings to sort by them";
     $prefs{PAGE_MAPCOUNT_PRE}           = "Total of";
@@ -216,14 +217,14 @@ sub get_mapcycle {
     # See if a map is in the mapcycle and if so, record it's position.
 
     my $position = 1;       # Used to track map's position in the mapcycle
-    my $hlmap;          # The map we're working with in the loop
-    my @sortkeys;       # Which field we're going to sort by
+    my $hlmap;              # The map we're working with in the loop
+    my @sortkeys;           # Which field we're going to sort by
 
     # To know if a map is in the current mapcycle, we'll read the list first
     open(MAPCYC,"$prefs{MAPCYCLE}") || die "Sorry, I couldn't open the mapcycle $prefs{MAPCYCLE}: $!\n";
     while (<MAPCYC>) {
-        chomp;                  # Take off the newline at the end
-        $_ =~ tr/\r//;          # as well as any DOS carriage returns
+        chop;                   # Take off the newline at the end
+        s/\r$//;                # as well as any DOS carriage returns
         if ( $mapname{"$_"} ) {
             $mapcycle{"$_"} = "$position";
         }
@@ -297,6 +298,5 @@ sub output_text_data {
     close(DATA);
 
 }
-
     
 ###############################################################################

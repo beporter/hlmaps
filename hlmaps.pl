@@ -44,7 +44,7 @@ my $CONF_FILE           = "/etc/hlmaps.conf";
 ###################### GLOBAL DEVELOPMENT CONSTANTS ###########################
 
 # Development constants - please don't mess with these
-my $VERSION             = "0.94, August 5, 2000";
+my $VERSION             = "0.95, September 1, 2000";
 my $AUTHOR_NAME         = "Scott McCrory";
 my $AUTHOR_EMAIL        = "smccrory\@users.sourceforge.net";
 my $HOME_PAGE           = "http://hlmaps.sourceforge.net";
@@ -68,7 +68,7 @@ my $count;          # Number of maps counted
 
 ################################## MAIN #######################################
 
-$CGI::POST_MAX=1024*100;    # Maximum 100k posts to prevent CGI DOS attacks
+$CGI::POST_MAX=1024*10;     # Maximum 10k posts to prevent CGI DOS attacks
 $CGI::DISABLE_UPLOADS=1;    # Disable uploads to prevent CGI DOS attacks
 $ENV{PATH} = '';            # Adjust path to prevent sloppy code execution
 $ENV{BASH_ENV} = '';        # Clear out environment to prevent sloppy code execution
@@ -77,7 +77,7 @@ $ENV{ENV} = '';             # Clear out another env to prevent sloppy code execu
 set_default_values();       # Fill in unspecified variables
 get_preferences();          # Load preferences from .conf file
 untaint_data();             # Perform validation of all input data
-get_map_details();          # Read HLmaps.data file in map details
+get_map_details();          # Read HLmaps.data file or MySQL table for map details
 
 if ($params{"map"}) {
     print_single_map();     # Print the single-map screen
@@ -115,7 +115,7 @@ sub set_default_values {
     $prefs{TABLE_NORM_HEAD_COLOR}       = "Navy";
     $prefs{TABLE_SORT_HEAD_COLOR}       = "Blue";
     
-    $prefs{DEFAULT_MAPS_PER_PAGE}       = 20;
+    $prefs{DEFAULT_MAPS_PER_PAGE}       = "20";
     
     $prefs{PAGE_HEADING}                = "HLmaps Server Map Listing";
     $prefs{PAGE_SUBHEADING}             = "Click the column headings to sort by them";
@@ -154,9 +154,8 @@ sub set_default_values {
     $prefs{MYSQL_MODDATE_FIELD}         = "moddate";
     $params{"sort"}                     = "mapname";
     $params{"order"}                    = "a";
-    $params{"mapsperpage"}              = $prefs{DEFAULT_MAPS_PER_PAGE};
-    $params{"page"}                     = 1;
-    $count                              = 0;
+    $params{"page"}                     = "1";
+    $count                              = "0";
 }
 
 # ----------------------------------------------------------------------------
@@ -247,6 +246,25 @@ sub print_page_header {
 }
 
 #------------------------------------------------------------------------------
+sub print_map_per_page_widget {
+    # Display the drop-down widget to let user determine how many maps to display
+
+    # If the number of maps/page wasn't passed in from CGI then use default
+    if ( !$params{mapsperpage} ) {
+        $params{mapsperpage} = $prefs{DEFAULT_MAPS_PER_PAGE};
+    }
+
+    # Now print the actual widget
+    print start_form();
+    print "<CENTER><B><I>$prefs{PAGE_MAPS_PER_PAGE}:</B></I> ";
+    print popup_menu("mapsperpage",[$params{mapsperpage},"10","20","50","100"]);
+    print submit("$prefs{PAGE_REFRESH}");
+    print "</CENTER>";
+    print end_form();
+    
+}
+
+#------------------------------------------------------------------------------
 sub print_nav_bar {
     # This is where we print the page navigation bar (really a table) so that
     #    users can limit the number of maps displayed per page and can walk
@@ -288,19 +306,6 @@ sub print_nav_bar {
         print "</TABLE>\n";
     }
     print "<BR>\n";
-}
-
-#------------------------------------------------------------------------------
-sub print_map_per_page_widget {
-    # Display the drop-down widget to let user determine how many maps to display
-
-    print start_form();
-    print "<CENTER><B><I>$prefs{PAGE_MAPS_PER_PAGE}:</B></I> ";
-    print popup_menu("mapsperpage",[$params{mapsperpage},"10","20","50","100"]);
-    print submit("$prefs{PAGE_REFRESH}");
-    print "</CENTER>";
-    print end_form();
-    
 }
 
 #------------------------------------------------------------------------------
