@@ -35,16 +35,17 @@ DOWNLOAD_URL                = /download/Games/cstrike/maps/
 #    Valid colors are White Silver Grey Black Red Maroon Purple Fuschia Lime
 #                     Yellow Olive Green Blue Navy Teal Aqua
 #
-PAGE_BG_URL                 = 
-PAGE_BG_COLOR               = Black 
-PAGE_TEXT_COLOR             = Yellow
-PAGE_LINK_COLOR             = Lime
-PAGE_V_LINK_COLOR           = Aqua
-PAGE_A_LINK_COLOR           = Green
-TABLE_BORDER_LIGHT_COLOR    = Aqua
-TABLE_BORDER_DARK_COLOR     = Green
-TABLE_NORM_HEAD_COLOR       = Navy
-TABLE_SORT_HEAD_COLOR       = Blue
+PAGE_BG_URL                 =           # Page background image
+PAGE_BG_COLOR               = Black     # Page background color
+PAGE_TEXT_COLOR             = Yellow    # Page text color
+PAGE_LINK_COLOR             = Lime      # Page link color
+PAGE_V_LINK_COLOR           = Aqua      # Page visited link color
+PAGE_A_LINK_COLOR           = Green     # Page link color
+TABLE_BORDER_LIGHT_COLOR    = Aqua      # Table light border color
+TABLE_BORDER_DARK_COLOR     = Green     # Table dark border color
+TABLE_NORM_HEAD_COLOR       = Navy      # Table normal head color
+TABLE_SORT_HEAD_COLOR       = Blue      # Table sorted head color
+DEFAULT_MAPS_DISPLAYED      = 20        # Number of maps diplayed by default
 
 #-----------------------------------------------------------------------------
 # Language preferences - use these to internationalize HLmaps

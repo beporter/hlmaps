@@ -13,22 +13,20 @@ Please help!
 ------------------------------------
 
 Structure:
-  - Add support for MySQL (periodic data collection and db-served web page queries)?
+    - Add support for MySQL (periodic data collection and db-served web page queries)?
 
 Installation:
-  - Create installation script?
+    - Create installation script?
 
 Documentation:
-  - Internationalize documentation (Spanish, German, French)
+    - Internationalize documentation (Spanish, German, French)
 
 Display, Graphics and Output:
-  - Continuously add more HL mod map images
-  - Add option to restrict number of maps displayed per page for faster page loads
-  - Internationalize output (Spanish, German, French) using .conf options
+    - Continuously add more HL mod map images
+    - Add option to restrict number of maps displayed per page for faster page loads
   
 Platform support:
-  - Add/confirm support for other Linuxes
-  - Add/confirm support for Windows NT/2000
-
+    -
+  
 --
 Scott McCrory (smccrory@users.sourceforge.net)

@@ -60,6 +60,7 @@ my %download;       # Hash to hold map's download URL
 my %image;          # Hash to hold map's image URL
 my %popularity;     # Hash to hold map's popularity (times run on server)
 my %mapcycle;       # Hash to hold map's inclusion in mapcycle.txt
+my %mapcyclepos;    # Hash to hold map's position in mapcycle.txt
 my %size;           # Hash to hold map's file size
 my %moddate;        # Hash to hold map's modification date
 
@@ -170,7 +171,8 @@ sub get_map_details {
         $image{"$shortname"} = $image{"$shortname"} || "#na#";
         $popularity{"$shortname"} = 0;
         $mapcycle{"$shortname"} = "#na#";
-        
+        $mapcyclepos{"$shortname"}= 9999;
+     
         # Get the map's corresponding download link if it exists
         $dlfilename = "$prefs{DOWNLOAD_DIR}" . "$shortname.$prefs{DOWNLOAD_EXT}";
         if ($dlfilename && -e $dlfilename) {
@@ -187,12 +189,19 @@ sub get_map_details {
 
 #------------------------------------------------------------------------------
 sub get_mapcycle {
+    
+    my $position = 1;       # Used to track map's position in the mapcycle
+    
     # To know if a map is in the current mapcycle, we'll read the list first
     open(MAPCYC,"$prefs{MAPCYCLE}") || die "Sorry, I couldn't open the mapcycle\n";
     while (<MAPCYC>) {
         chomp;                  # Take of the newline at the end
         $_ =~ tr/\r//;          # as well as any DOS line returns
-        if ( $mapname{"$_"} ) { $mapcycle{"$_"} = "Yes"; }
+        if ( $mapname{"$_"} ) {
+            $mapcycle{"$_"} = "$prefs{TABLE_MAPCYCLE_YES} (\#$position)";
+            $mapcyclepos{"$_"} = $position;
+        }           
+        ++$position;
     }
     close(MAPCYC);
 }
@@ -326,9 +335,9 @@ sub print_map_table {
         }
     } elsif ( $params{'sort'} eq "mapcycle") {
         if ( $params{"order"} eq "a") {
-            @sortkeys = sort { $mapcycle{$a} cmp $mapcycle{$b} } keys %mapcycle;
+            @sortkeys = sort { $mapcyclepos{$a} <=> $mapcyclepos{$b} } keys %mapcycle;
         } else {
-            @sortkeys = sort { $mapcycle{$b} cmp $mapcycle{$a} } keys %mapcycle;
+            @sortkeys = sort { $mapcyclepos{$b} <=> $mapcyclepos{$a} } keys %mapcycle;
         }
     } elsif ( $params{'sort'} eq "size") {
         if ( $params{"order"} eq "a") {
@@ -382,7 +391,7 @@ sub print_map_table {
 
         # Print whether this map is in the server's mapcycle.txt or not
         if ( $mapcycle{"$hlmap"} && $mapcycle{"$hlmap"} ne "#na#") {
-            print "<td align=\"center\"><b>$prefs{TABLE_MAPCYCLE_YES}</b></td>\n";
+            print "<td align=\"center\"><b>$mapcycle{$hlmap}</b></td>\n";
         } else {
             print "<td align=\"center\"><i>$prefs{TABLE_MAPCYCLE_NO}</i></td>\n";
         }

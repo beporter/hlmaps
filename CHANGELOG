@@ -19,10 +19,12 @@
     script's "shebang" line to make it work under ActiveState Perl.  Martin
     gets big kudos for testing and offering solutions for this.
   + Internationalized HLmaps output - use the .conf file to make it print the
-    output in your language
+    output in your language.
   + Map image now links to the download package if one exists.
   + Added .conf option for different download extension in case you make your
     maps downloads available in .arj, .arc, .gz, etc.
+  + Added color to table header row to indicate current sort order.
+  + Added indication of what position a map is in the mapcycle.
 
 = 0.92 07/22/2000
   - Fixed problem where a DOS-edited mapcycle with carriage returns would
