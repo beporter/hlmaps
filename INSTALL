@@ -13,28 +13,46 @@
     READ THIS WHOLE FILE    READ THIS WHOLE FILE    READ THIS WHOLE FILE
                       There, you've been told! :-)
 
+Introduction
+------------
+Setting up HLmaps really isn't a big deal, so don't let the long INSTALL file
+intimidate you.  I've decided to be pretty detailed so that new users have all
+the information they need while sophisticated users will know exactly how
+the whole shebang works and how to customize it.  Also, sorry to NT users out
+there for Linux-centric documentation - I could use some help with better NT
+instructions if you're up to the task...!
+
+Note: HLmaps now supports MySQL as the interrim data store.  I highly recommend
+getting HLmaps to work with just the text data file first before switching to
+MySQL to make resolving any problems easier.  That's also why I've put the
+pertainent installation instruction in a separate INSTALL.MySQL file...
+
+                          With that, here we go!
+
 Install Images
 --------------
-First install all of the JPG images from the hlmaps_images package available
-at http://sourceforge.net/project/filelist.php?group_id=8280 into a
+First install all of the JPG images from the latest hlmaps_images package
+available at http://sourceforge.net/project/filelist.php?group_id=8280 into a
 web-accessable directory.  If you already (or plan to) use hlds_ld.cgi
 (available at http://linuxhlds.halflife.org/) or hlmon.pl (available at
 http://www.linuxquake.com/qsmon) or cssserverstat (available at
-http://www.amateur-hour.net/discus/messages/695/695.html) then make all of
-them point to the same directory to make all simpler to maintain.
+http://www.amateur-hour.net/discus/messages/695/695.html) then by all means
+make all of them point to the same directory to make things simpler to maintain!
+For example, I store all my images in /home/httpd/html/images/Maps/halflife and
+make each one of those programs point to it for their image stores.
 
 Modify and Copy Preferences
 ---------------------------
-NOTE to NT users: Make sure that your paths in the .conf file, as well as in
+(NOTE to NT users: Make sure that your paths in the .conf file, as well as in
 the beginning of the hlmaps.pl and hlmaps.cron scripts are correct and use "\"
-characters instead of "/" for DIR paths.
+characters instead of "/" for DIR paths).
    
 Edit the hlmaps.conf.distrib file that came with the distribution to point to
-the paths and use the appearances you want.  Then copy it somewhere like your
-/etc/ directory as hlmaps.conf and assign appropriate owner, group and file
-permissions so that your web server can read it.  For example, I run my Linux
-Apache daemon under an "httpd" user and an "httpd" group.  So I'd do the
-following:
+the correct paths and to use the appearances you'd like.  Then copy it
+somewhere like your /etc/ directory as hlmaps.conf and assign appropriate owner,
+group and file permissions so that your web server can read it.  For example,
+I run my Linux Apache daemon under an "httpd" user and an "httpd" group.  So
+I'd type the following:
 
    cp hlmaps.conf.distrib /etc/hlmaps.conf
    chown httpd.httpd /etc/hlmaps.conf
@@ -42,31 +60,46 @@ following:
 
 Set Up The Cron Script
 ----------------------
-HLmaps now uses a cron script (hlmaps.cron) to periodically collect info
+HLmaps now uses a scheduled script (hlmaps.cron) to periodically collect info
 from the map directory, download dir, mapcycle, server logs, etc.  This makes
 HLmaps MUCH lighter on the server by not having to parse all those things
-for each web hit!  However, it means you have to take 2 additional steps over
-version 0.93 - 1) set up the cron job and 2) make sure the data file has the
-right permissions for read and write.  If you're running Linux, this is very
-easy.  Simply copy hlmaps.cron to the /etc/cron.daily directory and make it
-executable by typing:
+for each web hit.  However, it means you have to take 2 additional steps over
+version 0.93 - 1) set up the scheduled job and 2) make sure the data file has
+the right permissions for read and write.
+  
+    Win NT
+    ------
+    If you're running NT, then you'll want to get hold of a scheduling program
+    from http://www.tucows.com or use WinAT to interface with the built-in
+    scheduler service.  Please let me know what works for you and I'll put
+    better NT instructions in the next HLmaps release.  Essentially you just
+    want to copy hlmaps.cron to a convenient location (not web accessable, and
+    some people just plop it into the c:\winnt\system directory) then tell the
+    scheduler to run it nightly.  You should test hlmaps.cron from the command
+    line first to make sure it runs independantly, then  work on scheduling it.
 
-   cp hlmaps.cron /etc/cron.daily/hlmaps.cron
-   chown root.root /etc/cron.daily/hlmaps.cron
-   chmod 755 /etc/cron.daily/hlmaps.cron
+    Linux
+    -----
+    Setting up a cron job for Linux is very easy.  Simply copy hlmaps.cron to
+    the /etc/cron.daily directory and make it executable by typing:
+
+        cp hlmaps.cron /etc/cron.daily/hlmaps.cron
+        chown root.root /etc/cron.daily/hlmaps.cron
+        chmod 755 /etc/cron.daily/hlmaps.cron
    
-You should make sure that it's pointing to the hlmaps.conf file above and then
-test it by invoking it from the command line:
+    You should make sure that hlmaps.cron is pointing to the hlmaps.conf file
+    (look at the top of the script) and then test it by invoking it from the
+    command line:
 
-    /etc/cron.daily/hlmaps.cron
+        /etc/cron.daily/hlmaps.cron
     
-If it doesn't say anything to you, then it most likely worked - check for
-/var/hlmaps.data (or whatever your specified) for content.  You're already
-half-way there!
+    If it takes a few seconds (or minutes) and then returns without saying
+    anything to you, then it (most likely) worked - check for /var/hlmaps.data
+    (or whatever your specified) for content.  You're already half-way there!
 
 Set up Data File Permissions
 ----------------------------
-As mentioned in the section above, you'll now need to make sure the hlmaps.pl
+As mentioned in the section above, you'll now need to make sure the hlmaps.data
 (run by the web server) can be read correctly.  I recommend:
 
     chmod 744 /var/hlmaps.data
@@ -102,10 +135,9 @@ and please be specific about what you see and what you've tried.
 
 MySQL Notes
 -----------
-MySQL is not supported yet, but I'm very close to implementing it.  Because of
-that, you'll see some "prestigial" variables in the .conf file that don't do
-anything.  If you're interested in MySQL capabilities, please email me, as I
-need some beta testers...
+MySQL is now supported!!  Once you have HLmaps working with just the text data
+file, go to the INSTALL.MySQL file to learn how to use a database as the interrim
+data store.
 
 --
 Hope you enjoy!

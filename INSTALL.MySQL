@@ -1,0 +1,66 @@
+###############################################################################
+#                                                                             #
+# INSTALL.MySQL - How to integrate HLmaps with a MySQL database               #
+#           - Copyright Scott McCrory as part of the HLmaps distribution      #
+#           - Distributed under the GNU Public License - see docs for info    #
+#           - http://hlmaps.sourceforge.net                                   #
+#                                                                             #
+###############################################################################
+# CVS $Id$
+###############################################################################
+
+Introduction
+------------
+HLmaps now supports MySQL as the interrim data store!  I added this
+functionality in hopes that other developers could use the information gathered
+for new applications that I can't even imagine.  I don't think you'll get any
+speed improvements with MySQL vs. the text data file and you'll be introducing
+an additional component which could break, so only go this route if you want
+to experiment with the capability, develop for it or because another app you
+want to run depends on it.  IF YOU ARE DEVELOPING FOR THIS CAPABILITY, please
+email me at smccrory@users.sourceforge.net with any questions, suggestions,
+etc. as I'm very interested in seeing how this plays out.
+
+I highly recommend getting HLmaps to work with just the text data file first
+before switching to MySQL to make resolving any problems easier.  I'm pretty
+new to databases and MySQL so if one of you more experienced blokes finds
+something I missed, please let me know.
+
+Set up the Database
+-------------------
+I'll assume that you already have MySQL installed as well as the Perl DBI stuff
+needed.  If you're new to this database system, I recommend getting a book
+called "MySQL" by Paul Dubois published by New Riders - I've found it to be
+excellent.
+
+Create a database called "HLmaps" using your favorite interface (I like
+kmysqladmin myself) and check to make sure that it was created OK.
+
+Create a User and Assign Permissions
+------------------------------------
+Again, using your favorite interface, create a user called "HLmaps" with a
+password of "HLmaps" and grant it full permissions to ONLY the HLmaps database
+from ONLY the localhost unless you plan to connect from another system.
+
+Modify the CONF Settings
+------------------------
+Change the DATA_LOCATION variable in the hlmaps.conf file to "mysql" and check
+to make sure the other MYSQL_* variables are suitable.  This will tell
+hlmaps.cron and hlmaps.pl to use MySQL instead of the text data file for
+interrim storage.
+
+Test and Troubleshoot
+---------------------
+Manually run hlmaps.cron by typing /etc/cron.daily/hlmaps.cron and see if any
+errors were reported.  If you get a permissions error, check grants, and so on.
+Once you have everything worked out, hlmaps.cron should be silently successful
+and you can check the database for a table called "maps" with the same info
+that your hlmaps.data file was storing.  Now you should be able to run
+hlmaps.pl from a browser window to access the database during its data lookup
+phase.  Move the text data file if you want to be sure hlmaps.pl is using the
+DB instead of the file.  If it still works, then you're done!
+
+--
+Hope you enjoy!
+Scott and the HLmaps development team.
+

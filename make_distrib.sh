@@ -11,11 +11,11 @@
 
 # First refresh the docs in the HTML tree
 cd /home/sources/hlmaps
-cp -f CHANGELOG CONTRIBUTING CONTRIBUTORS INSTALL LICENSE README TODO hlmaps.conf.distrib hlmaps.cron hlmaps.pl hlmaps_create_db.sql ../hlmaps-htdocs/
+cp -f CHANGELOG CONTRIBUTING CONTRIBUTORS INSTALL LICENSE README TODO hlmaps.conf.distrib hlmaps.cron hlmaps.pl INSTALL.MySQL ../hlmaps-htdocs/
 
 # Now prepare the distribution directory
 rm -rf /home/sources/hlmaps/hlmaps-releases/*
-cp -f CHANGELOG CONTRIBUTING CONTRIBUTORS INSTALL LICENSE README TODO hlmaps.conf.distrib hlmaps.cron hlmaps.pl hlmaps_create_db.sql ../hlmaps-release/
+cp -f CHANGELOG CONTRIBUTING CONTRIBUTORS INSTALL LICENSE README TODO hlmaps.conf.distrib hlmaps.cron hlmaps.pl INSTALL.MySQL ../hlmaps-release/
 
 # Tar and gzip the release and html packages
 cd /home/sources/

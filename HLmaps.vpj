@@ -1,0 +1,29 @@
+[COMPILER]
+version=5.0b
+compile=concur|capture|:Compile:&Compile,
+make=concur|capture|:Build:&Build,
+rebuild=concur|capture|:Rebuild:&Rebuild,
+debug=:Debug:&Debug,
+execute=:Execute:E&xecute,
+user1=hide|:User 1:User 1,
+user2=hide|:User 2:User 2,
+workingdir=.
+includedirs=
+reffile=
+MACRO=\n
+[FILES]
+CHANGELOG
+CONTRIBUTING
+CONTRIBUTORS
+hlmaps.conf.distrib
+hlmaps.cron
+hlmaps.pl
+hlmaps.PRJ
+hlmaps_create_db.sql
+INSTALL
+LICENSE
+make_distrib.sh
+README
+test.sh
+TODO
+[ASSOCIATION]
