@@ -21,6 +21,17 @@ SERVER_LOG_SPAWN_MSG        = Spawning server
 MAP_EXTENSION               = bsp
 MAPCYCLE                    = /usr/bin/half-life/cstrike/mapcycle.txt
 
+# If you're using a real-time server status program like csserverstat, hlds_ld,
+#    or hlmon.pl then put the URL for it here, otherwise make it null
+# REALTIME_STATUS_URL       = 
+REALTIME_STATUS_URL         = /cgi-bin/csserverstat.pl
+
+# Thanks to code from Rod May's kkrcon.pl, we can tell you which map is playing
+#    if you specify these three bits of information for us
+SERVER                      = coffin.darktech.org
+PORT                        = 27017
+PASS                        = tesla
+
 # Maps which exist _inside_ of the mod (i.e. which don't have a .bsp file)
 #    Someone please tell me what others are or if these get changed!
 # CSTRIKE:    BUILT_IN_MAPS =
@@ -120,7 +131,5 @@ TABLE_MAPCYCLE_NO           = No
 # This can either be a phrase like "Image Not Available" or a URL to an image
 #TABLE_IMAGE_NO              = /images/Maps/halflife/cs_default.jpg
 TABLE_IMAGE_NO              = Image Not Available
-
-DATE_FORMAT                 = # Unused for now! #
 
 ###############################################################################

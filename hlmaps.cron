@@ -11,6 +11,7 @@
 ###############################################################################
 
 use strict;                         # Requires us to declare all vars used
+use vars;                           # Supresses warnings during "require DBI"
 use File::stat;                     # Lets us get stats of map files
 
 ######################## GLOBAL CONSTANTS #####################################
@@ -23,7 +24,7 @@ my $CONF_FILE           = "/etc/hlmaps.conf";
 ###################### GLOBAL DEVELOPMENT CONSTANTS ###########################
 
 # Development constants - please don't mess with these
-my $VERSION             = "0.95, September 24, 2000";
+my $VERSION             = "0.96, October 10, 2000";
 my $AUTHOR_NAME         = "Scott McCrory";
 my $AUTHOR_EMAIL        = "smccrory\@users.sourceforge.net";
 my $HOME_PAGE           = "http://hlmaps.sourceforge.net";
@@ -284,7 +285,7 @@ sub output_text_data {
 sub output_mysql_data {
     # Write the data collected to the MySQL database specified in the .conf file
     
-    use DBI;
+    require DBI;
 
     my $hlmap;          # The map we're working with in the loop
     my @sortkeys;       # Which field we're going to sort by

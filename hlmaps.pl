@@ -31,8 +31,11 @@
 ###############################################################################
 
 use strict;                         # Requires us to declare all vars used
+use vars;                           # Supresses warnings during "require DBI"
 use CGI qw(:all);                   # Lets us grab vars passed from web server
 use CGI::Carp qw(fatalsToBrowser);  # Sent fatal errors to browser
+use Socket;                         # Use network sockets for kkrcon functions
+use Sys::Hostname;                  # Use hostname resolution for kkrcon too
 
 ######################## GLOBAL CONSTANTS #####################################
 # Make sure you modify this if you're running multiple instances of HLmaps
@@ -44,7 +47,7 @@ my $CONF_FILE           = "/etc/hlmaps.conf";
 ###################### GLOBAL DEVELOPMENT CONSTANTS ###########################
 
 # Development constants - please don't mess with these
-my $VERSION             = "0.95, September 24, 2000";
+my $VERSION             = "0.96, October 10, 2000";
 my $AUTHOR_NAME         = "Scott McCrory";
 my $AUTHOR_EMAIL        = "smccrory\@users.sourceforge.net";
 my $HOME_PAGE           = "http://hlmaps.sourceforge.net";
@@ -66,6 +69,10 @@ my %moddate;        # Hash to hold map's modification date
 
 my $count;          # Number of maps counted
 
+my $active_map;     # Real-time server status - active map in play
+my $active_players; # Real-time server status - active players
+my $max_players;    # Real-time server status - maximum players
+
 ################################## MAIN #######################################
 
 $CGI::POST_MAX=1024*10;     # Maximum 10k posts to prevent CGI DOS attacks
@@ -77,12 +84,20 @@ $ENV{ENV} = '';             # Clear out another env to prevent sloppy code execu
 set_default_values();       # Fill in unspecified variables
 get_preferences();          # Load preferences from .conf file
 untaint_data();             # Perform validation of all input data
+
+# Get the maps information from file or database
 if ( $prefs{DATA_LOCATION} ne "mysql" ) {
     get_text_map_details(); # Read HLmaps data from file
 } else {
     get_mysql_map_details();# Read HLmaps data from MySQL database    
 }
 
+# Get information about server's current map in play
+if  ( $prefs{SERVER} && $prefs{PORT}&& $prefs{PASS} ) {
+    get_realtime_server_status();
+}
+
+# Now create the output web page using what we have found
 if ($params{"map"}) {
     print_single_map();     # Print the single-map screen
 } else {
@@ -107,6 +122,10 @@ sub set_default_values {
     $prefs{MAP_EXTENSION}               = "bsp";
     $prefs{DOWNLOAD_EXT}                = "zip";
     
+    $prefs{SERVER}                      = "";
+    $prefs{PORT}                        = "";
+    $prefs{PASS}                        = "";
+
     $prefs{PAGE_BG_URL}                 = "";
     $prefs{PAGE_BG_COLOR}               = "Black";
     $prefs{PAGE_TEXT_COLOR}             = "Yellow";
@@ -297,9 +316,80 @@ sub get_mysql_map_details {
 
 #------------------------------------------------------------------------------
 sub mysql_bail_out {
-    # Print the full text error messages for any database problems  
+    # Print the full text error messages for any database problems
     my ($message) = shift;
     die "$message\nError $DBI::err ($DBI::errstr)\n";
+}
+
+sub get_realtime_server_status {
+      
+    # Copied from Rod May's kkrcon proglet for QW/Q2/Q3/HL (and others :)
+    #    and modified for our specific purposes.
+    #    Questions & comments (only about the original code) to rcon@rod.net
+    #    Anything broken is probably my fault - Scott
+    
+    my $iaddr;
+    my $proto;
+    my $paddr;
+    my $hisiaddr;
+    my $cmd;
+    my $msg;
+    my $hispaddr;
+    my $rin;
+    my $rout;
+    my $ans;
+    my $resp;
+    my @array;
+    my $ln;
+    my $fnd;
+
+    $iaddr = gethostbyname("localhost");
+    $proto = getprotobyname('udp');
+    $paddr = sockaddr_in(0, $iaddr);
+    socket(SOCKET, PF_INET, SOCK_DGRAM, $proto) || die "socket: $!";
+    bind(SOCKET, $paddr)                        || die "bind: $!";
+    $hisiaddr = gethostbyname($prefs{SERVER})   || die "unknown host";
+    
+    $cmd = "status";
+    $msg  = "\xFF\xFF\xFF\xFFrcon  $prefs{PASS} $cmd \0";
+    $hispaddr = sockaddr_in($prefs{PORT}, $hisiaddr);
+    defined(send(SOCKET, $msg, 0, $hispaddr))   || die "send $prefs{SERVER}: $!";
+    $rin = '';
+    vec($rin, fileno(SOCKET), 1) = 1;
+    if (select($rout = $rin, undef, undef, 10.0)) {
+        $ans = "";
+        do {
+            $hispaddr = recv(SOCKET, $resp, 4096, 0);
+            $resp =~ s/\x00+$//;                    # trailing crap
+            $resp =~ s/^\xFF\xFF\xFF\xFFl//;        # HL response
+            $resp =~ s/^\xFF\xFF\xFF\xFFn//;        # QW response
+            $resp =~ s/^\xFF\xFF\xFF\xFF//;         # Q2/Q3 response
+            $resp =~ s/^\xFE\xFF\xFF\xFF.....//;    # HL bug/feature
+            $ans = $ans . $resp;
+        } until select($rout = $rin, undef, undef, 1.0) != 1;
+        #print $ans;
+
+        # We now have our status information in $ans so let's parse it for the
+        #    current map and the active/max of players
+        @array = split(/\n/, $ans);
+        foreach $ln (@array){
+            chop ($ln);
+            $fnd++;
+            if ($fnd == 4) {
+                $ln =~ /map\s+:\s+(\w+)/;
+                $active_map = $1;
+            }
+            if ($fnd == 5) {
+                $ln =~ /players:\s+(\d+)\s+active\s+\((\d+)/;
+                $active_players = $1;
+                $max_players = $2;
+            }
+         }
+    } # Else we timed out - do nothing
+
+    #print "\nActive map    : '$active_map'\n";
+    #print "\nActive players: '$active_players'\n";
+    #print "\nMax    players: '$max_players'\n";
 }
 
 #------------------------------------------------------------------------------
@@ -551,8 +641,17 @@ sub print_map_table {
 
             print "<TR>\n";             # Begin the table row
 
-            # Print the map's name and corresponding download and link to single map display
-            print "<TD ALIGN=\"CENTER\"><A HREF=\"$SCRIPT_NAME?map=$hlmap\"><B>$mapname{$hlmap}</B></A></TD>\n";
+            # Print the map's name and link to single map display (also real-time info if appropriate)
+            if ($hlmap eq $active_map) {
+                print "<TD ALIGN=\"CENTER\"><A HREF=\"$SCRIPT_NAME?map=$hlmap\"><B>$mapname{$hlmap}</B></A><BR><BR>\n";
+                if ($prefs{REALTIME_STATUS_URL}) {
+                    print "<A HREF=\"$prefs{REALTIME_STATUS_URL}\"><B><I>Map In Play ($active_players/$max_players)</I></B></A></TD>\n";
+                } else {
+                    print "<B><I>Map In Play ($active_players/$max_players)</I></B></TD>\n";
+                }
+            } else {
+                print "<TD ALIGN=\"CENTER\"><A HREF=\"$SCRIPT_NAME?map=$hlmap\"><B>$mapname{$hlmap}</B></A></TD>\n";
+            }
 
             # If there's a corresponding image file, display it.
             if ( $image{"$hlmap"} && $image{"$hlmap"} ne "#na#" ) {
@@ -626,26 +725,35 @@ sub print_single_map {
     my $yday;           # Used for file stat printing
     my $isdst;          # Used for file stat printing
 
-
     # Print page header
     print header(), start_html("$params{map}");
     print "<body background=\"$prefs{PAGE_BG_URL}\" bgcolor=\"$prefs{PAGE_BG_COLOR}\" text=\"$prefs{PAGE_TEXT_COLOR}\" link=\"$prefs{PAGE_LINK_COLOR}\" vlink=\"$prefs{PAGE_V_LINK_COLOR}\" alink=\"$prefs{PAGE_A_LINK_COLOR}\">\n";
     print h1("<CENTER>HLmaps: $params{map}</CENTER>\n");
 
-    print "<BR><BR>";
+    print "<BR>";
+
+    # Print real-time info if appropriate
+    if ($params{map} eq $active_map) {
+        if ($prefs{REALTIME_STATUS_URL}) {
+            print h3("<CENTER><A HREF=\"$prefs{REALTIME_STATUS_URL}\"><B><I>Map In Play ($active_players/$max_players)</I></B></A></TD></CENTER>\n");
+        } else {
+            print h3("<CENTER><B><I>Map In Play ($active_players/$max_players)</I></B></TD></CENTER>\n");
+        }
+    }
+    print "<BR>";
 
     # Print table header
     print "<TABLE border=\"1\" bordercolordark=\"$prefs{TABLE_BORDER_LIGHT_COLOR}\" bordercolorlight=\"$prefs{TABLE_BORDER_DARK_COLOR}\" cellspacing=\"0\" cellpadding=\"3\" ALIGN=\"CENTER\">\n";
 
     # Print image if one exists
     if ( $image{$params{"map"}} && $image{$params{"map"}} ne "#na#" ) {
-        print "<TR><TD ALIGN=\"CENTER\"><IMG SRC=\"" . $image{$params{"map"}} . "\" ALT=\"$params{map}\" WIDTH=212 HEIGHT=160 BORDER=0></TD></TR>\n";
+        print "<TR><TD ALIGN=\"CENTER\"><A HREF=\"$SCRIPT_NAME\"><IMG SRC=\"" . $image{$params{"map"}} . "\" ALT=\"$params{map}\" WIDTH=212 HEIGHT=160 BORDER=0></A></TD></TR>\n";
     } else {
         $_ = $prefs{TABLE_IMAGE_NO};
         if ( /[\\\/]/ ) {
-            print "<TR><TD ALIGN=\"CENTER\"><IMG SRC=\"$prefs{TABLE_IMAGE_NO}\" ALT=\"$params{map}\" WIDTH=212 HEIGHT=160 BORDER=0></TD>\n";
+            print "<TR><TD ALIGN=\"CENTER\"><A HREF=\"$SCRIPT_NAME\"><IMG SRC=\"$prefs{TABLE_IMAGE_NO}\" ALT=\"$params{map}\" WIDTH=212 HEIGHT=160 BORDER=0></A></TD></TR>\n";
         } else {
-            print "<TR><TD ALIGN=\"CENTER\"><I>$prefs{TABLE_IMAGE_NO}</I></TD>\n";
+            print "<TR><TD ALIGN=\"CENTER\"><A HREF=\"$SCRIPT_NAME\"><I>$prefs{TABLE_IMAGE_NO}</I></A></TD></TR>\n";
         }
     }
 
