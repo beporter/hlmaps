@@ -13,8 +13,37 @@
 - bugfix, + enhancement, * contrib, = RELEASE
 ---------------------------------------------
 
+= 0.94 08/05/2000
+  * Thanks to Justin Harris, Matthew McClendon and Matt Chambers for many
+    ideas behind this release...
+  - Fixed a bug where the number of maps displayed was 1 less than the number
+    specified (i.e. 9 instead of 10).
+  - Set default values for many variables in case they're not specified in the
+    .conf file.  This can happen when a user forgets to update their .conf
+    after upgrading HLmaps and there are additional variables.
+  - Script was only reading the name of the first game session listed in each
+    log file when determining map popularity.  Now it should pick up multiple
+    map loads within a log file. - thanks Matthew McClendon!
+  + HLmaps now uses a cron script to gather information from the log files,
+    mapcycle, map directory, download directory and txt files.  This is to
+    greatly improve the run-time performance of HLmaps (many servers had over
+    10 meg of logs to parse for each web hit!) and to make it easier for the
+    future addition of MySQL support.  See the INSTALL file for details.
+  + Now printing nav bar below the map table in addition to the one above.
+  + Added {A} for ascending and {D} for descending sort order indication.
+  + You can now specify a "no maps available" image in place of the text
+    message using a hlmaps.conf variable.  This can be used to force all the
+    columns to be the same height.
+  + Added variable in .conf for built-in maps (these are ones which don't have
+    external .bsp files - they're integrated into the mod)
+  + Added a separate single-map view with the map.txt file, download link,
+    image, stats, etc.  This now serves as the jump-off point for downloads
+    instead of direct links from the main results table.
+  + Added drop-down widget to let user change number of maps displayed/page.
+  + Added documentation to the .conf file to make it clearer
+
 = 0.93 07/25/2000
-  * Thanks to Martin Hömberg for many ideas behind this release!
+  * Thanks to Martin Hömberg for many ideas behind this release...
   + Confirmed NT portability - admins will just have to remove the "-T" on the
     script's "shebang" line to make it work under ActiveState Perl.  Martin
     gets big kudos for testing and offering solutions for this.

@@ -13,16 +13,21 @@ TESTERS and DEBUGGERS
    - Kevin Johnson      (first tester)
    - Glen Muras         (FreeBSD 3.3 testing)
    - Martin Hoemberg    (Windows NT testing)
+   - Justin Harris      (base-0/1 printing bug)
+   - Matthew McClendon  (logfile scanning bug)
    
 CODE CONTRIBUTIONS
    - Glen Muras         (Fix for big log files)
    - Martin Hoemberg    (Fixes for NT particulars)
+   - Justin Harris      (Misc. appearance improvements)
 
 DOCUMENTATION
    -
 
 MAP IMAGES
-   - Rob Abbott         (Of hlds_ld fame! - bunches of TFC map images)
+   - Rob Abbott
+   - Danny ??
+   - David Wyble
 
 --
 Scott McCrory <smccrory@users.sourceforge.com>

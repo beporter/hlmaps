@@ -16,8 +16,16 @@
 SERVER_BASE_DIR             = /usr/bin/half-life/cstrike/
 SERVER_MAP_DIR              = /usr/bin/half-life/cstrike/maps/
 SERVER_LOG_DIR              = /usr/bin/half-life/cstrike/logs/
+SERVER_LOG_SPAWN_MSG        = Spawning server
 MAP_EXTENSION               = bsp
 MAPCYCLE                    = /usr/bin/half-life/cstrike/mapcycle.txt
+
+# Maps which exist _inside_ of the mod (i.e. which don't have a .bsp file)
+# CSTRIKE:    BUILT_IN_MAPS =
+# VALVE:      BUILT_IN_MAPS = datacore:stalkyard:undertow:subtransit:snark_pit:boot_camp:lambda_bunker:gasworks:frenzy:bounce
+# TFC:        BUILT_IN_MAPS = 2fort:well:rock2:cz2:hunted:push:badlands:crossover2:dustbowl:warpath:epicenter
+# SI:         BUILT_IN_MAPS = si_alley:si_laser:si_colony:si_moon:si_hirise:si_metropolis:si_military:si_tundra
+BUILT_IN_MAPS               =
 
 #-----------------------------------------------------------------------------
 # Image file constants - remember trailing "/" or "\" on DIRs and URLs!
@@ -31,10 +39,41 @@ DOWNLOAD_EXT                = zip
 DOWNLOAD_URL                = /download/Games/cstrike/maps/
 
 #-----------------------------------------------------------------------------
+# This is where hlmaps.cron puts it's data when it periodically collects it.
+#    It's also where hlmaps.pl will look for it's info when displaying output
+#    to web clients. It can either be a pathname to a read-write text file
+#    or "mysql" to use a database to hold the information (recommended for
+#    sites with tons of maps).
+#DATA_LOCATION              = mysql
+DATA_LOCATION               = /var/hlmaps.data
+
+#-----------------------------------------------------------------------------
+# These MySQL settings are only applicable if you set DATA_LOCATION = mysql
+#    above. If you did, then hlmaps.cron will put its data in the database and
+#    hlmaps.pl will look here for it's info when displaying output to web
+#    clients. Feel free to modify these if you want to rename the database or
+#    share it with another process. BUT don't share the table specified below
+#    because we DELETE and RE_CREATE it each time the cron script runs!!
+MYSQL_SERVER                = localhost
+MYSQL_DATABASE              = HLmaps
+MYSQL_USER                  = HLmaps
+MYSQL_PASSWORD              = readonly
+MYSQL_TABLE                 = maps
+MYSQL_MAPNAME_FIELD         = mapname
+MYSQL_IMAGEURL_FIELD        = imageurl
+MYSQL_DOWNLOAD_FIELD        = downloadurl
+MYSQL_TEXTFILE_FIELD        = textfile
+MYSQL_POPULARITY_FIELD      = popularity
+MYSQL_MAPCYCLE_FIELD        = mapcycle
+MYSQL_SIZE_FIELD            = size
+MYSQL_MODDATE_FIELD         = moddate
+
+#-----------------------------------------------------------------------------
 # Appearance preferences
 #    Valid colors are White Silver Grey Black Red Maroon Purple Fuschia Lime
 #                     Yellow Olive Green Blue Navy Teal Aqua
 #
+#PAGE_BG_URL                 = /images/hl_bg.jpg
 PAGE_BG_URL                 =           # Page background image relative URL
 PAGE_BG_COLOR               = Black     # Page background color
 PAGE_TEXT_COLOR             = Yellow    # Page text color
@@ -53,6 +92,9 @@ PAGE_HEADING                = HLmaps Server Map Listing
 PAGE_SUBHEADING             = Click the column headings to sort by them
 PAGE_MAPCOUNT_PRE           = Total of
 PAGE_MAPCOUNT_SUF           = maps found
+PAGE_DOWNLOAD               = Download this map
+PAGE_MAPS_PER_PAGE          = Maps Per Page
+PAGE_REFRESH                = Refresh
 
 TABLE_MAPNAME_COLUMN        = Map Name
 TABLE_IMAGE_COLUMN          = Image
@@ -61,12 +103,15 @@ TABLE_MAPCYCLE_COLUMN       = In Map Cycle
 TABLE_SIZE_COLUMN           = Size
 TABLE_MODDATE_COLUMN        = Mod Date
 
-TABLE_IMAGE_NO              = Image Not Available
 TABLE_POPULARITY_COUNT_PRE  = Played
 TABLE_POPULARITY_COUNT_SUF  = time(s)
 TABLE_POPULARITY_NEVER      = Never Played
 TABLE_MAPCYCLE_YES          = In Map Cycle
 TABLE_MAPCYCLE_NO           = No
+
+# This can either be a phrase like Image Not Available or a URL
+#TABLE_IMAGE_NO              = /images/Maps/halflife/cs_default.jpg
+TABLE_IMAGE_NO              = Image Not Available
 
 DATE_FORMAT                 = # Unused for now! #
 
