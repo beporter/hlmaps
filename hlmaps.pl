@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w -T
+#!/usr/bin/perl -w
 ###############################################################################
 #                                                                             #
 # hlmaps.pl - A script to present a nice web-based HL server map listing      #
@@ -36,37 +36,12 @@ use CGI::Carp qw(fatalsToBrowser);  # Sent fatal errors to browser
 
 ######################## GLOBAL CONSTANTS #####################################
 
-# Half-Life server constants
-my $SERVER_BASE_DIR     = "/usr/bin/half-life/cstrike/";
-my $SERVER_MAP_DIR      = "$SERVER_BASE_DIR" . "maps/";
-my $SERVER_LOG_DIR      = "$SERVER_BASE_DIR" . "logs/";
-my $MAPCYCLE            = "$SERVER_BASE_DIR" . "mapcycle.txt";
+my $CONF_FILE           = "/etc/hlmaps.conf";
 
-# Image file constants
-my $IMAGES_DIR          = "/home/httpd/html/images/Maps/halflife/";
-my $IMAGES_URL          = "/images/Maps/halflife/";
-
-# Download file constants
-my $DOWNLOAD_DIR        = "/home/ftp/pub/Games/cstrike/maps/";
-my $DOWNLOAD_URL        = "/download/Games/cstrike/maps/";
-
-# Page appearance preferences
-my $PAGE_HEADING        = "HLmaps' Server Map Listing";
-my $PAGE_BG_IMG         = "";
-my $PAGE_BG_COLOR       = "#000033";
-my $PAGE_TEXT_COLOR     = "#ffff99";
-my $PAGE_LINK_COLOR     = "#ffcc00";
-my $PAGE_V_LINK_COLOR   = "#999966";
-my $PAGE_A_LINK_COLOR   = "#66ff00";
-my $BODY = "<body background=\"$PAGE_BG_IMG\" bgcolor=\"$PAGE_BG_COLOR\" text=\"$PAGE_TEXT_COLOR\" link=\"$PAGE_LINK_COLOR\" vlink=\"$PAGE_V_LINK_COLOR\" alink=\"$PAGE_A_LINK_COLOR\">";
-
-# Table appearance preferences
-my $TABLE_BORDER_LIGHT_COLOR    = "#999933";
-my $TABLE_BORDER_DARK_COLOR     = "#cccc66";
-my $TABLE = "<table border=\"1\" bordercolordark=\"$TABLE_BORDER_LIGHT_COLOR\" bordercolorlight=\"$TABLE_BORDER_DARK_COLOR\" cellspacing=\"0\" cellpadding=\"3\" align=\"center\">";
+###################### GLOBAL DEVELOPMENT CONSTANTS ###########################
 
 # Development constants - please don't mess with these
-my $VERSION             = "0.91, July 20, 2000";
+my $VERSION             = "0.92, July 22, 2000";
 my $AUTHOR_NAME         = "Scott McCrory";
 my $AUTHOR_EMAIL        = "scott\@mccrory.com";
 my $HOME_PAGE           = "http://hlmaps.sourceforge.net";
@@ -75,6 +50,7 @@ my $SCRIPT_NAME         = script_name();
 ############################# GLOBAL VARIABLES ################################
 
 my %params;         # Hash for untainted, global CGI parameters
+my %prefs;          # Hash for user preferences as obtained from $CONF_FILE
 
 my $count;          # Number of maps counted
 
@@ -93,11 +69,11 @@ $CGI::DISABLE_UPLOADS=1;   # Disable uploads to prevent CGI DOS attacks
 
 $ENV{PATH} = '/bin:/usr/bin:/usr/local/bin';    # Adjust path to prevent sloppy code execution
 $ENV{BASH_ENV} = '';                            # Clear out environment to prevent sloppy code execution
-$ENV{ENV} = '';                                 # Clear out environment to prevent sloppy code execution
+$ENV{ENV} = '';                                 # Clear out another env to prevent sloppy code execution
+
 untaint_data();                                 # Perform validation of all input data
-
 $params{"order"} = $params{"order"} || "a";     # If sort order wasn't specified, make it (a)scending
-
+get_preferences();
 get_map_details();
 get_mapcycle();
 get_map_popularity();
@@ -136,6 +112,26 @@ sub untaint_data {
     }
 }
 
+# ----------------------------------------------------------------------------
+sub get_preferences {
+    # Load HLmaps preferences from $CONF_FILE
+    
+    my $var;                        # Variable name in .conf
+    my $value;                      # Value of variable in .conf
+
+    open(CONF, "$CONF_FILE") || die "Sorry, I couldn't open the preferences file $CONF_FILE\n";
+    while (<CONF>) { 
+        chomp;                      # no newline 
+        s/#.*//;                    # no comments 
+        s/^\s+//;                   # no leading white 
+        s/\s+$//;                   # no trailing white 
+        next unless length;         # anything left? 
+        ($var, $value) = split(/\s*=\s*/, $_, 2);
+        $prefs{$var} = $value;      # load the untainted value into our hash of vars
+    }
+    close(CONF);
+}
+
 #------------------------------------------------------------------------------
 sub get_map_details {
     # Open up server map directory and get list of all *.bsp files there
@@ -154,7 +150,8 @@ sub get_map_details {
     my $filename;        # Map filename
     my $shortname;       # Map short filename
     
-    @filelist = `ls -l $SERVER_MAP_DIR*.bsp`;
+    $filename = "$prefs{SERVER_MAP_DIR}" . "*.bsp";
+    @filelist = `ls -l $filename`;
     foreach $line (@filelist)
     {
         
@@ -163,7 +160,7 @@ sub get_map_details {
     
         # Get the map details
         ($perms, $nop, $owner, $group, $size, $month, $day, $yeartime, $filename) = split(' ', $line);
-        $filename =~ /$SERVER_MAP_DIR(\w+)/;
+        $filename =~ /$prefs{SERVER_MAP_DIR}(\w+)/;
         $shortname = $1;
         chomp($shortname);
         $mapname{"$shortname"} = "$shortname";
@@ -176,15 +173,15 @@ sub get_map_details {
         $mapcycle{"$shortname"} = "#na#";
         
         # Get the map's corresponding download link if it exists
-        $filename = "$DOWNLOAD_DIR" . "$shortname" . ".zip";
+        $filename = "$prefs{DOWNLOAD_DIR}" . "$shortname" . ".zip";
         if ($filename && -e $filename) {
             $download{"$shortname"} = $filename;
         }
            
         # Get the map's corresponding image file if it exists
-        $filename = "$IMAGES_DIR" . "$shortname" . ".jpg";
+        $filename = "$prefs{IMAGES_DIR}" . "$shortname" . ".jpg";
         if ($filename && -e $filename) {
-            $image{"$shortname"} = "$IMAGES_URL" . "$shortname" . ".jpg";
+            $image{"$shortname"} = "$prefs{IMAGES_URL}" . "$shortname" . ".jpg";
         }
     }
 }
@@ -192,7 +189,7 @@ sub get_map_details {
 #------------------------------------------------------------------------------
 sub get_mapcycle {
     # To know if a map is in the current mapcycle, we'll read the list first
-    open(MAPCYC,"$MAPCYCLE") || die "Sorry, I couldn't open the mapcycle\n";
+    open(MAPCYC,"$prefs{MAPCYCLE}") || die "Sorry, I couldn't open the mapcycle\n";
     while (<MAPCYC>) {
         chomp;
         if ( $mapname{"$_"} ) { $mapcycle{"$_"} = "Yes"; }
@@ -206,12 +203,12 @@ sub get_map_popularity {
     my @filelist;           # List of files
     my($filename, $line);    
         
-    opendir(DIR, "$SERVER_LOG_DIR");
+    opendir(DIR, "$prefs{SERVER_LOG_DIR}");
     @filelist = readdir(DIR);
     closedir(DIR);
     foreach $filename (@filelist) {
         if ($filename !~ /log$/) { next; }
-        open(LOGFILE, $SERVER_LOG_DIR.$filename) or die "Could not open $filename: $!";
+        open(LOGFILE, $prefs{SERVER_LOG_DIR}.$filename) or die "Could not open $filename: $!";
         while ($line = <LOGFILE>) {
             if ($line =~ /Spawning server \"(\w+)\"/) {
                 if ($mapname{$1}) { ++$popularity{$1}; }
@@ -225,9 +222,9 @@ sub get_map_popularity {
 #------------------------------------------------------------------------------
 sub print_page_header {
     # Print the page header
-    print header(), start_html("$PAGE_HEADING");
-    print $BODY;
-    print h1("<CENTER> $PAGE_HEADING </CENTER>");
+    print header(), start_html("$prefs{PAGE_HEADING}");
+    print "<body background=\"$prefs{PAGE_BG_IMG}\" bgcolor=\"$prefs{PAGE_BG_COLOR}\" text=\"$prefs{PAGE_TEXT_COLOR}\" link=\"$prefs{PAGE_LINK_COLOR}\" vlink=\"$prefs{PAGE_V_LINK_COLOR}\" alink=\"$prefs{PAGE_A_LINK_COLOR}\">";
+    print h1("<CENTER> $prefs{PAGE_HEADING} </CENTER>");
     print h3("<CENTER><I> Click the column headings to sort by them </I></CENTER><BR>");
 }
 
@@ -244,7 +241,7 @@ sub print_table_header {
     }        
 
     # Print the table header
-    print $TABLE;
+    print "<table border=\"1\" bordercolordark=\"$prefs{TABLE_BORDER_LIGHT_COLOR}\" bordercolorlight=\"$prefs{TABLE_BORDER_DARK_COLOR}\" cellspacing=\"0\" cellpadding=\"3\" align=\"center\">";
     print "<tr>";     
     print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapname&order=$inverse\"><b>Map Name</b></a></td>";
     print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=image&order=$inverse\"><b>Image</b></a></td>";
@@ -312,7 +309,7 @@ sub print_map_table {
  
         # Print the map's name (and corresponding download link if present)
         if ($download{"$hlmap"} && $download{"$hlmap"} ne "#na#" && -e $download{"$hlmap"}) {
-            print "<td align=\"center\"><a href=\"$DOWNLOAD_URL$hlmap.zip\"><B>$hlmap</B></a></td>";
+            print "<td align=\"center\"><a href=\"$prefs{DOWNLOAD_URL}$hlmap.zip\"><B>$hlmap</B></a></td>";
         } else {
             print "<td align=\"center\"><B>$hlmap</B></td>";
         }

@@ -26,20 +26,24 @@ DOWNLOAD_DIR        = /home/ftp/pub/Games/cstrike/maps/
 DOWNLOAD_URL        = /download/Games/cstrike/maps/
 
 # Page appearance preferences
+#    Valid colors are White Silver Grey Black Red Maroon Purple Fuschia Lime
+#                     Yellow Olive Green Blue Navy Teal Aqua
+#
 PAGE_HEADING        = HLmaps Server Map Listing
 PAGE_BG_IMG         = 
-PAGE_BG_COLOR       = #000033
-PAGE_TEXT_COLOR     = #ffff99
-PAGE_LINK_COLOR     = #ffcc00
-PAGE_V_LINK_COLOR   = #999966
-PAGE_A_LINK_COLOR   = #66ff00
-BODY = <body background=\"$PAGE_BG_IMG\" bgcolor=\"$PAGE_BG_COLOR\" text=\"$PAGE_TEXT_COLOR\" link=\"$PAGE_LINK_COLOR\" vlink=\"$PAGE_V_LINK_COLOR\" alink=\"$PAGE_A_LINK_COLOR\">
+PAGE_BG_COLOR       = Black 
+PAGE_TEXT_COLOR     = Yellow
+PAGE_LINK_COLOR     = Lime
+PAGE_V_LINK_COLOR   = Aqua
+PAGE_A_LINK_COLOR   = Green
 
 # Table appearance preferences
-TABLE = <table border=\"1\" bordercolordark=\"$TABLE_BORDER_LIGHT_COLOR\" bordercolorlight=\"$TABLE_BORDER_DARK_COLOR\" cellspacing=\"0\" cellpadding=\"3\" align=\"center\">
-TABLE_BORDER_LIGHT_COLOR    = #999933
-TABLE_BORDER_DARK_COLOR     = #cccc66
-TABLE_NORM_HEAD_COLOR       = #66CCFF
-TABLE_SORT_HEAD_COLOR       = #00CCFF
+#    Valid colors are White Silver Grey Black Red Maroon Purple Fuschia Lime
+#                     Yellow Olive Green Blue Navy Teal Aqua
+#
+TABLE_BORDER_LIGHT_COLOR    = Aqua
+TABLE_BORDER_DARK_COLOR     = Green
+TABLE_NORM_HEAD_COLOR       = Purple
+TABLE_SORT_HEAD_COLOR       = Fuchsia
 
 ###############################################################################
