@@ -9,7 +9,11 @@
 # CVS $Id$
 ###############################################################################
 
-#scp1 hlmaps_release.tar.gz smccrory@hlmaps.sourceforge.net:
+cd ..
 
 # Copy the updated web site docs to SourceForge
-scp1 hlmaps_htdocs.tar.gz smccrory@hlmaps.sourceforge.net:/home/groups/hlmaps/
+scp hlmaps-htdocs.tar.gz smccrory@hlmaps.sourceforge.net:/home/groups/h/hl/hlmaps/htdocs/
+
+# Open a shell session to allow us to decompress it
+ssh -l smccrory hlmaps.sourceforge.net
+

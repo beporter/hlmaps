@@ -10,17 +10,16 @@
 ###############################################################################
 
 # First refresh the docs in the HTML tree
-cd /home/sources/hlmaps
-chown -R smccrory.users *
-cp -f CHANGELOG CONTRIBUTING CONTRIBUTORS INSTALL LICENSE README TODO hlmaps.conf.distrib hlmaps.cron hlmaps.pl INSTALL.MySQL ../hlmaps-htdocs/
+chown -R smccrory.smccrory *
+cp -f CHANGELOG CONTRIBUTING CONTRIBUTORS INSTALL LICENSE README TODO hlmaps.conf.distrib hlmaps.cron hlmaps.pl INSTALL.MySQL htdocs/
 
 # Now prepare the distribution directory
-rm -rf /home/sources/hlmaps/hlmaps-releases/*
+rm -rf ../hlmaps-release/*
 cp -f CHANGELOG CONTRIBUTING CONTRIBUTORS INSTALL LICENSE README TODO hlmaps.conf.distrib hlmaps.cron hlmaps.pl INSTALL.MySQL ../hlmaps-release/
 
 # Tar and gzip the release and html packages
-cd /home/sources/
+cd .. 
 tar cvf hlmaps-release.tar hlmaps-release
 gzip -9 hlmaps-release.tar
-tar cvf hlmaps-htdocs.tar hlmaps-htdocs
+tar cvf hlmaps-htdocs.tar hlmaps/htdocs
 gzip -9 hlmaps-htdocs.tar
