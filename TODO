@@ -13,14 +13,6 @@ Please help!
 ------------------------------------
 
 Code and Structure:
-  - Implement optional kill thresholds for map popularity count calculation.
-    This is to allow admins to discount maps that had fewer than a certain
-    number of kills to help elminate maps that didn't have much *real* activity
-    on them.
-  - Add option to display which map is currently in play using code from Rod
-    May's excellent kkrcon.pl script.
-  - Add a link to hlds_ld.cgi or csserverstats, etc. for real-time server
-    status screen. 
 
 Installation:
     - None

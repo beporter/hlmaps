@@ -17,7 +17,7 @@
 SERVER_BASE_DIR             = /usr/bin/half-life/cstrike/
 SERVER_MAP_DIR              = /usr/bin/half-life/cstrike/maps/
 SERVER_LOG_DIR              = /usr/bin/half-life/cstrike/logs/
-SERVER_LOG_SPAWN_MSG        = Spawning server
+SERVER_LOG_SPAWN_MSG        = Loading map
 MAP_EXTENSION               = bsp
 MAPCYCLE                    = /usr/bin/half-life/cstrike/mapcycle.txt
 
@@ -28,8 +28,8 @@ REALTIME_STATUS_URL       =
 
 # Thanks to code from Rod May's kkrcon.pl, we can tell you which map is playing
 #    if you specify these three bits of information for us
-SERVER                      = coffin.darktech.org
-PORT                        = 27017
+SERVER                      = 
+PORT                        = 27015
 PASS                        = password
 
 # Maps which exist _inside_ of the mod (i.e. which don't have a .bsp file)

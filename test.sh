@@ -17,7 +17,7 @@ cp -f /home/sources/hlmaps/hlmaps.pl /home/httpd/cgi-bin/hlmaps_devel.pl
 chown http.http /home/httpd/cgi-bin/hlmaps_devel.pl
 chmod 755 /home/httpd/cgi-bin/hlmaps_devel.pl
 
-cp -f /home/sources/hlmaps/hlmaps.conf.distrib /etc/hlmaps.conf
+#cp -f /home/sources/hlmaps/hlmaps.conf.distrib /etc/hlmaps.conf
 chown http.http /etc/hlmaps.conf
 chmod 644 /etc/hlmaps.conf
 

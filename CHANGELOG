@@ -13,6 +13,13 @@
 - bugfix, + enhancement, * contrib, = RELEASE
 ---------------------------------------------
 
+= 1.1 03/27/2001
+  = This release is specifically to allow operation with hlds 1.1.0.6+ servers.
+  * Merged Michael Park's update of Rod May's kkrcon code to determine currently
+    running map from hlds 1.1.0.6+ servers (thanks Michael!)
+  - Changed hlmaps.conf.distrib file to search for "Loading map" instead of
+    "Spawning Server" for indication of map load in 1.1.0.6+ servers.
+
 = 1.0 10/23/2000
   = I'm calling this 1.0 because it has all the features (and it looks like the
     stability) of a 1.0 release.  Future work will most likely be aimed at bug

@@ -47,7 +47,7 @@ my $CONF_FILE           = "/etc/hlmaps.conf";
 ###################### GLOBAL DEVELOPMENT CONSTANTS ###########################
 
 # Development constants - please don't mess with these
-my $VERSION             = "1.0, October 23, 2000";
+my $VERSION             = "1.1, March 27, 2001";
 my $AUTHOR_NAME         = "Scott McCrory";
 my $AUTHOR_EMAIL        = "smccrory\@users.sourceforge.net";
 my $HOME_PAGE           = "http://hlmaps.sourceforge.net";
@@ -319,7 +319,7 @@ print "Uncomment the 'use DBI;' line in sub get_mysql_map_details to enable DB f
 sub mysql_bail_out {
     # Print the full text error messages for any database problems
     my ($message) = shift;
-    die "$message\nError $DBI::err ($DBI::errstr)\n";
+    die "$message\n";
 }
 
 #------------------------------------------------------------------------------
@@ -344,7 +344,9 @@ sub get_realtime_server_status {
     my @array;
     my $ln;
     my $fnd;
-
+    my $challengenum;								#added for HL 1.1.0.6 new requirement challenge number
+	$challengenum = "";	
+#New section for HL 1.1.0.6 Basically a copy of below routine to get the challenge number
     $iaddr = gethostbyname("localhost");
     $proto = getprotobyname('udp');
     $paddr = sockaddr_in(0, $iaddr);
@@ -352,8 +354,7 @@ sub get_realtime_server_status {
     bind(SOCKET, $paddr)                        || die "bind: $!";
     $hisiaddr = gethostbyname($prefs{SERVER})   || die "unknown host";
     
-    $cmd = "status";
-    $msg  = "\xFF\xFF\xFF\xFFrcon  $prefs{PASS} $cmd \0";
+    $msg  = "\xFF\xFF\xFF\xFFchallenge rcon \0";	#Challenge command
     $hispaddr = sockaddr_in($prefs{PORT}, $hisiaddr);
     defined(send(SOCKET, $msg, 0, $hispaddr))   || die "send $prefs{SERVER}: $!";
     $rin = '';
@@ -367,31 +368,57 @@ sub get_realtime_server_status {
             $resp =~ s/^\xFF\xFF\xFF\xFFn//;        # QW response
             $resp =~ s/^\xFF\xFF\xFF\xFF//;         # Q2/Q3 response
             $resp =~ s/^\xFE\xFF\xFF\xFF.....//;    # HL bug/feature
+            $resp =~ s/^\xFF\xFF\xFF\xFF//;         # HL1.1.0.6 challenge doesn't return with the l just the 4 FF chars
             $ans = $ans . $resp;
         } until select($rout = $rin, undef, undef, 1.0) != 1;
         #print $ans;
+            $ans =~ /challenge\s+rcon\s+(\w+)/;		#Returned string
+            $challengenum = $1;						#Set New Var
+        
+    }
+#End New Section
 
-        # We now have our status information in $ans so let's parse it for the
-        #    current map and the active/max of players
-        @array = split(/\n/, $ans);
-        foreach $ln (@array){
-            chop ($ln);
-            $fnd++;
-            if ($fnd == 4) {
-                $ln =~ /map\s+:\s+(\w+)/;
-                $active_map = $1;
-            }
-            if ($fnd == 5) {
-                $ln =~ /players:\s+(\d+)\s+active\s+\((\d+)/;
-                $active_players = $1;
-                $max_players = $2;
-            }
-         }
-    } # Else we timed out - do nothing
+	if ($challengenum != ""){   #if we don't have challenge num don't bother executing
+		$cmd = "status";
+		$msg  = "\xFF\xFF\xFF\xFFrcon $challengenum $prefs{PASS} $cmd \0"; #Modified for HL 1.1.0.6 added challenge number
+		defined(send(SOCKET, $msg, 0, $hispaddr))   || die "send $prefs{SERVER}: $!";
+		$rin = '';
+		vec($rin, fileno(SOCKET), 1) = 1;
+		if (select($rout = $rin, undef, undef, 10.0)) {
+		    $ans = "";
+		    do {
+		        $hispaddr = recv(SOCKET, $resp, 4096, 0);
+		        $resp =~ s/\x00+$//;                    # trailing crap
+		        $resp =~ s/^\xFF\xFF\xFF\xFFl//;        # HL response
+		        $resp =~ s/^\xFF\xFF\xFF\xFFn//;        # QW response
+		        $resp =~ s/^\xFF\xFF\xFF\xFF//;         # Q2/Q3 response
+		        $resp =~ s/^\xFE\xFF\xFF\xFF.....//;    # HL bug/feature
+		        $ans = $ans . $resp;
+		    } until select($rout = $rin, undef, undef, 1.0) != 1;
+		    #print $ans;
 
-    #print "\nActive map    : '$active_map'\n";
-    #print "\nActive players: '$active_players'\n";
-    #print "\nMax    players: '$max_players'\n";
+		    # We now have our status information in $ans so let's parse it for the
+		    #    current map and the active/max of players
+		    @array = split(/\n/, $ans);
+		    foreach $ln (@array){
+		        chop ($ln);
+		        $fnd++;
+		        if ($fnd == 4) {
+		            $ln =~ /map\s+:\s+(\w+)/;
+		            $active_map = $1;
+		        }
+		        if ($fnd == 5) {
+		            $ln =~ /players:\s+(\d+)\s+active\s+\((\d+)/;
+		            $active_players = $1;
+		            $max_players = $2;
+		        }
+		     }
+		} # Else we timed out - do nothing
+
+		#print "\nActive map    : '$active_map'\n";
+		#print "\nActive players: '$active_players'\n";
+		#print "\nMax    players: '$max_players'\n";
+	}
 }
 
 #------------------------------------------------------------------------------

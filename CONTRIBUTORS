@@ -19,6 +19,7 @@ TESTERS and DEBUGGERS
    - Andrew Brampton    (SSI testing and feedback)
    
 CODE CONTRIBUTIONS
+   - Michael Parks      (Update of Rod May's kkrcon code to determine current map for hlds 1.1.0.6+)
    - Glen Muras         (Fix for big log files)
    - Martin Hoemberg    (Fixes for NT particulars)
    - Justin Harris      (Misc. HTML improvements, kill thresholds)
