@@ -45,7 +45,7 @@ TABLE_BORDER_LIGHT_COLOR    = Aqua      # Table light border color
 TABLE_BORDER_DARK_COLOR     = Green     # Table dark border color
 TABLE_NORM_HEAD_COLOR       = Navy      # Table normal head color
 TABLE_SORT_HEAD_COLOR       = Blue      # Table sorted head color
-DEFAULT_MAPS_DISPLAYED      = 20        # Number of maps diplayed by default
+DEFAULT_MAPS_PER_PAGE       = 20        # Default number of maps per page
 
 #-----------------------------------------------------------------------------
 # Language preferences - use these to internationalize HLmaps
