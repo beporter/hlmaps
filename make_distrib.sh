@@ -21,5 +21,9 @@ cp -f CHANGELOG CONTRIBUTING CONTRIBUTORS INSTALL LICENSE README TODO hlmaps.con
 cd .. 
 tar cvf hlmaps-release.tar hlmaps-release
 gzip -9 hlmaps-release.tar
-tar cvf hlmaps-htdocs.tar hlmaps/htdocs
+cd hlmaps/htdocs
+tar cvf hlmaps-htdocs.tar *
 gzip -9 hlmaps-htdocs.tar
+cp hlmaps-htdocs.tar.gz /home/sources/
+rm -f hlmaps-htdocs.tar.gz
+cd /home/sources/hlmaps

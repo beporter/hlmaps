@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# upload_hlmaps.sh - Uploads an HLmaps distribution package to SourceForge    #
+# upload_htdocs.sh - Uploads an HLmaps distribution package to SourceForge    #
 #       - Copyright Scott McCrory as part of the HLmaps distribution          #
 #       - Distributed under the GNU Public License - see docs for more info   #
 #       - http://hlmaps.sourceforge.net                                       #
