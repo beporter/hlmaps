@@ -10,27 +10,30 @@
 ###############################################################################
 
 TESTERS and DEBUGGERS
-   - Kevin Johnson      (first tester)
+   - Kevin Johnson      (First tester)
    - Glen Muras         (FreeBSD 3.3 testing)
    - Martin Hoemberg    (Windows NT testing)
-   - Justin Harris      (base-0/1 printing bug)
-   - Matthew McClendon  (logfile scanning bug)
-   - Jon Adams          (default settings bug)
-   - Andrew Brampton    (SSI testing)
+   - Justin Harris      (Base-0/1 printing bug)
+   - Matthew McClendon  (Logfile scanning bug)
+   - Jon Adams          (Default settings bug)
+   - Andrew Brampton    (SSI testing and feedback)
    
 CODE CONTRIBUTIONS
    - Glen Muras         (Fix for big log files)
    - Martin Hoemberg    (Fixes for NT particulars)
    - Justin Harris      (Misc. HTML improvements, kill thresholds)
    - Ludwig Nussel      (Fix to handle DOS-formatted mapcycle.txt correctly)
+   - Jon Adams          (Fix for calculating number of pages)
+   - Rod May            (Code from kkrcon.pl)
 
-MAP IMAGES
+MAP IMAGES and MISC HELP
    - Rob Abbott
    - Danny Collings
    - David Wyble
    - Ron Yacketta
    - Mike Sessions
    - Matt Chambers
+   - Tom Verzenni
 
 --
 Scott McCrory <smccrory@users.sourceforge.com>
