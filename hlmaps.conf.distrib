@@ -35,7 +35,7 @@ DOWNLOAD_URL                = /download/Games/cstrike/maps/
 #    Valid colors are White Silver Grey Black Red Maroon Purple Fuschia Lime
 #                     Yellow Olive Green Blue Navy Teal Aqua
 #
-PAGE_BG_URL                 =           # Page background image
+PAGE_BG_URL                 =           # Page background image relative URL
 PAGE_BG_COLOR               = Black     # Page background color
 PAGE_TEXT_COLOR             = Yellow    # Page text color
 PAGE_LINK_COLOR             = Lime      # Page link color

@@ -27,7 +27,7 @@
   + Added indication of what position a map is in the mapcycle.
   + Added ability to specify number of maps per page displayed, as well as the
     paging navigation bar.  This should be great for servers with tons of
-    maps and 56k modem clients who don't want to wait for the pages to load.
+    maps and 56k modem clients who don't want to wait for pages to load.
 
 = 0.92 07/22/2000
   - Fixed problem where a DOS-edited mapcycle with carriage returns would

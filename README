@@ -31,24 +31,25 @@
 
 DESCRIPTION
 -----------
-HLmaps is a Perl/CGI script for Linux and FreeBSD (and possibly NT) Half-Life
-game server admins written by Scott McCrory.  It allows web site visitors to
-view all your loaded maps, screen shots, download links and some file
-statistics in a nice, sortable table.
+HLmaps is a Perl/CGI script for Linux, FreeBSD and WinNT Half-Life game server
+admins written by Scott McCrory.  It allows web site visitors to view all your
+loaded maps, screen shots, download links and some file statistics in a nice,
+sortable table.
 
 HLmaps should be pretty safe to use, as I've implemented Perl's "warn" and
 "taint" modes (although NT ActiveState Perl users may need to remove the -T).
 Processing loads won't be very noticable if only a few people use it at a time
 but under more use HLmaps would do a lot of directory scanning and logfile
 parsing, so keep that in mind if you have a really busy web site (in the future
-I may provide MySQL support to fix this problem).
+I may provide MySQL support to alleviate this problem).
 
 REQUIRES
 --------
-  Linux or FreeBSD (and possibly NT)
-  Perl 5.0+ (Ships with nearly every *nix distribution)
-  Apache web server	http://www.apache.org (others supporting CGI may work)
-  Half-Life Server software (well duh!)
+  + Linux, FreeBSD or WinNT
+  + Perl 5.0+  (Ships with nearly every *nix distribution) or ActiveState's Perl
+       for WinNT
+  + Web server supporting CGI (Apache extensively tested)
+  + Half-Life Server software (well duh!)
 
 DOWNLOADING
 -----------
