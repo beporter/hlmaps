@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -w -T
 ###############################################################################
 #                                                                             #
 # hlmaps.pl - A script to present a nice web-based HL server map listing      #
@@ -33,8 +33,11 @@
 use strict;                         # Requires us to declare all vars used
 use CGI qw(:all);                   # Lets us grab vars passed from web server
 use CGI::Carp qw(fatalsToBrowser);  # Sent fatal errors to browser
+use File::stat;                     # Lets us get stats of map files
 
 ######################## GLOBAL CONSTANTS #####################################
+# Make sure you modify this if you're running multiple instances of HLmaps
+#    on the same server (pointing to a CS server, a TFC server, etc.)
 
 my $CONF_FILE           = "/etc/hlmaps.conf";
 
@@ -52,8 +55,6 @@ my $SCRIPT_NAME         = script_name();
 my %params;         # Hash for untainted, global CGI parameters
 my %prefs;          # Hash for user preferences as obtained from $CONF_FILE
 
-my $count;          # Number of maps counted
-
 my %mapname;        # Hash to hold map's shortname
 my %download;       # Hash to hold map's download URL
 my %image;          # Hash to hold map's image URL
@@ -61,6 +62,8 @@ my %popularity;     # Hash to hold map's popularity (times run on server)
 my %mapcycle;       # Hash to hold map's inclusion in mapcycle.txt
 my %size;           # Hash to hold map's file size
 my %moddate;        # Hash to hold map's modification date
+
+my $count;          # Number of maps counted
 
 ################################## MAIN #######################################
 
@@ -73,15 +76,15 @@ $ENV{ENV} = '';                                 # Clear out another env to preve
 
 untaint_data();                                 # Perform validation of all input data
 $params{"order"} = $params{"order"} || "a";     # If sort order wasn't specified, make it (a)scending
-get_preferences();
-get_map_details();
-get_mapcycle();
-get_map_popularity();
-print_page_header();
-print_table_header();
-print_map_table();
-print_table_footer();
-print_page_footer();
+get_preferences();                              # Load preferences from .conf file
+get_map_details();                              # Scan map dir and get details
+get_mapcycle();                                 # See if map is in mapcycle.txt
+get_map_popularity();                           # See how many times map's been played
+print_page_header();                            # Print page header, title, etc.
+print_table_header();                           # Print table contruct and header row
+print_map_table();                              # Print actual table with info
+print_table_footer();                           # Cap off the table
+print_page_footer();                            # End the HTML page
 
 ############################### SUBROUTINES ###################################
 
@@ -104,7 +107,7 @@ sub untaint_data {
     # Now untaint all of the data by using substring pattern matching
     foreach(keys %tainted_params) {
         if ( $tainted_params{"$_"} ) {
-            $tainted_params{"$_"} =~/([\w-.]+)/;
+            $tainted_params{"$_"} =~/([\w\-.]+)/;
             $params{"$_"} = $1;
         } else {
             $params{"$_"} = '';
@@ -137,50 +140,46 @@ sub get_map_details {
     # Open up server map directory and get list of all *.bsp files there
     #    then cycle through each file and see if a corresponding image and download exists
     #    and then print a table row with the pertainent information
-    my @filelist;        # List of files
-    my $line;            # Counter for cycling through maps
-    my $perms;           # Map file permissions (unused)
-    my $nop;             # (unused)
-    my $owner;           # Map file owner (unused)
-    my $group;           # Map file group (unused)
-    my $size;            # Map file size
-    my $month;           # Map file month
-    my $day;             # Map file day
-    my $yeartime;        # Map file year and time
-    my $filename;        # Map filename
-    my $shortname;       # Map short filename
+    my @filelist;       # List of files
+    my $size;           # Map file size
+    my $filename;       # Map filename for loop
+    my $shortname;      # Map short filename
+    my $inode;          # inode for file stat gathering
+    my $dlfilename;     # Download filename, if it exists
+    my $imgfilename;    # Image filename, if it exists
     
-    $filename = "$prefs{SERVER_MAP_DIR}" . "*.bsp";
-    @filelist = `ls -l $filename`;
-    foreach $line (@filelist)
+
+    opendir(DIR, "$prefs{SERVER_MAP_DIR}") || die "Couldn't read map dir: $prefs{SERVER_MAP_DIR}"; 
+    @filelist = grep { /\.$prefs{MAP_EXTENSION}$/ } readdir(DIR); 
+    closedir(DIR); 
+
+    foreach $filename (@filelist)
     {
         
-        ++$count;
-        chomp($line);
+        ++$count;                       # Increment the map counter
+        $shortname = $filename;         # Strip off the extension
+        $shortname =~/(\w+)./;
+        $shortname = $1;
     
         # Get the map details
-        ($perms, $nop, $owner, $group, $size, $month, $day, $yeartime, $filename) = split(' ', $line);
-        $filename =~ /$prefs{SERVER_MAP_DIR}(\w+)/;
-        $shortname = $1;
-        chomp($shortname);
+        $inode = stat("$prefs{SERVER_MAP_DIR}" . "$filename"); 
+        $moddate{"$shortname"} = $inode->mtime; # In epoch seconds 
+        $size{"$shortname"} = int($inode->size / 1024); 
         $mapname{"$shortname"} = "$shortname";
-        $size{"$shortname"} = int($size / 1024);
-        $moddate{"$shortname"} = "$month $day $yeartime";
-
         $download{"$shortname"} = $download{"$shortname"} || "#na#";
         $image{"$shortname"} = $image{"$shortname"} || "#na#";
         $popularity{"$shortname"} = 0;
         $mapcycle{"$shortname"} = "#na#";
         
         # Get the map's corresponding download link if it exists
-        $filename = "$prefs{DOWNLOAD_DIR}" . "$shortname" . ".zip";
-        if ($filename && -e $filename) {
-            $download{"$shortname"} = $filename;
+        $dlfilename = "$prefs{DOWNLOAD_DIR}" . "$shortname" . ".zip";
+        if ($dlfilename && -e $dlfilename) {
+            $download{"$shortname"} = $dlfilename;
         }
            
         # Get the map's corresponding image file if it exists
-        $filename = "$prefs{IMAGES_DIR}" . "$shortname" . ".jpg";
-        if ($filename && -e $filename) {
+        $imgfilename = "$prefs{IMAGES_DIR}" . "$shortname" . ".jpg";
+        if ($imgfilename && -e $imgfilename) {
             $image{"$shortname"} = "$prefs{IMAGES_URL}" . "$shortname" . ".jpg";
         }
     }
@@ -191,7 +190,8 @@ sub get_mapcycle {
     # To know if a map is in the current mapcycle, we'll read the list first
     open(MAPCYC,"$prefs{MAPCYCLE}") || die "Sorry, I couldn't open the mapcycle\n";
     while (<MAPCYC>) {
-        chomp;
+        chomp;                  # Take of the newline at the end
+        $_ =~ tr/\r//;          # as well as any DOS line returns
         if ( $mapname{"$_"} ) { $mapcycle{"$_"} = "Yes"; }
     }
     close(MAPCYC);
@@ -223,7 +223,7 @@ sub get_map_popularity {
 sub print_page_header {
     # Print the page header
     print header(), start_html("$prefs{PAGE_HEADING}");
-    print "<body background=\"$prefs{PAGE_BG_IMG}\" bgcolor=\"$prefs{PAGE_BG_COLOR}\" text=\"$prefs{PAGE_TEXT_COLOR}\" link=\"$prefs{PAGE_LINK_COLOR}\" vlink=\"$prefs{PAGE_V_LINK_COLOR}\" alink=\"$prefs{PAGE_A_LINK_COLOR}\">";
+    print "<body background=\"$prefs{PAGE_BG_URL}\" bgcolor=\"$prefs{PAGE_BG_COLOR}\" text=\"$prefs{PAGE_TEXT_COLOR}\" link=\"$prefs{PAGE_LINK_COLOR}\" vlink=\"$prefs{PAGE_V_LINK_COLOR}\" alink=\"$prefs{PAGE_A_LINK_COLOR}\">";
     print h1("<CENTER> $prefs{PAGE_HEADING} </CENTER>");
     print h3("<CENTER><I> Click the column headings to sort by them </I></CENTER><BR>");
 }
@@ -243,12 +243,12 @@ sub print_table_header {
     # Print the table header
     print "<table border=\"1\" bordercolordark=\"$prefs{TABLE_BORDER_LIGHT_COLOR}\" bordercolorlight=\"$prefs{TABLE_BORDER_DARK_COLOR}\" cellspacing=\"0\" cellpadding=\"3\" align=\"center\">";
     print "<tr>";     
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapname&order=$inverse\"><b>Map Name</b></a></td>";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=image&order=$inverse\"><b>Image</b></a></td>";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=popularity&order=$inverse\"><b>Times Played</b></a></td>";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapcycle&order=$inverse\"><b>In Map Cycle</b></a></td>";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=size&order=$inverse\"><b>Size</b></a></td>";
-    print "<td align=\"center\"><b>Mod Date</b></td>";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapname&order=$inverse\"><b>Map Name</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=image&order=$inverse\"><b>Image</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=popularity&order=$inverse\"><b>Times Played</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapcycle&order=$inverse\"><b>In Map Cycle</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=size&order=$inverse\"><b>Size</b></a></td>\n";
+    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=moddate&order=$inverse\"><b>Mod Date</b></a></td>\n";
     print "</tr>\n";
 }
 
@@ -257,7 +257,16 @@ sub print_map_table {
     
     my $hlmap;          # The map we're working with in the loop
     my @sortkeys;       # Which field we're going to sort by
-
+    my $seconds;        # Used for file stat printing
+    my $minutes;        # Used for file stat printing
+    my $hours;          # Used for file stat printing
+    my $day_of_month;   # Used for file stat printing
+    my $month;          # Used for file stat printing
+    my $year;           # Used for file stat printing
+    my $wday;           # Used for file stat printing
+    my $yday;           # Used for file stat printing
+    my $isdst;          # Used for file stat printing
+                    
     # If we're asked to sort, then we'll rearrange the hash key order on
     #    the requested sort element ...
     if ( $params{'sort'} eq "download") {
@@ -305,53 +314,53 @@ sub print_map_table {
     }
 
     foreach $hlmap (@sortkeys) {
+        
+        # Begin the table row
         print "<tr>";
  
         # Print the map's name (and corresponding download link if present)
         if ($download{"$hlmap"} && $download{"$hlmap"} ne "#na#" && -e $download{"$hlmap"}) {
-            print "<td align=\"center\"><a href=\"$prefs{DOWNLOAD_URL}$hlmap.zip\"><B>$hlmap</B></a></td>";
+            print "<td align=\"center\"><a href=\"$prefs{DOWNLOAD_URL}$hlmap.zip\"><B>$hlmap</B></a></td>\n";
         } else {
-            print "<td align=\"center\"><B>$hlmap</B></td>";
+            print "<td align=\"center\"><B>$hlmap</B></td>\n";
         }
  
         # If there's a corresponding image file, display it.
         if ($image{"$hlmap"} && $image{"$hlmap"} ne "#na#") {
-            print "<td align=\"center\"><img src=\"$image{\"$hlmap\"}\" ALT=\"$hlmap\" WIDTH=212 HEIGHT=160></td>";
+            print "<td align=\"center\"><img src=\"$image{\"$hlmap\"}\" ALT=\"$hlmap\" WIDTH=212 HEIGHT=160></td>\n";
         } else {
-            print "<td align=\"center\"><i>Image not available</i></td>";
+            print "<td align=\"center\"><i>Image not available</i></td>\n";
         }
  
         # Now print image's popularity (number of times run on the server)
         if ($popularity{"$hlmap"} > 0) {
             print "<td align=\"center\"><B>Played $popularity{\"$hlmap\"} time";
             if ( $popularity{"$hlmap"} > 1 ) { print "s"; }
-            print "</B></td>";
+            print "</B></td>\n";
         } else {
-            print "<td align=\"center\"><i>never</i></td>";
+            print "<td align=\"center\"><i>never</i></td>\n";
         }
 
         # Print whether this map is in the server's mapcycle.txt or not
         if ( $mapcycle{"$hlmap"} && $mapcycle{"$hlmap"} ne "#na#") {
-            print "<td align=\"center\"><b>In Mapcycle</b></td>";
+            print "<td align=\"center\"><b>In Mapcycle</b></td>\n";
         } else {
-            print "<td align=\"center\"><i>no</i></td>";
+            print "<td align=\"center\"><i>no</i></td>\n";
         }
  
         # Print map's file size
         if ( $size{"$hlmap"} && $size{"$hlmap"} ne "#na#") {
-            print "<td align=\"right\">$size{\"$hlmap\"} k</td>";
+            print "<td align=\"right\">$size{\"$hlmap\"} k</td>\n";
         } else {
-            print "<td align=\"center\"><i>-</i></td>";
+            print "<td align=\"center\"><i>-</i></td>\n";
         }
 
-        # Print map's modification date
-        if ( $moddate{"$hlmap"} && $moddate{"$hlmap"} ne "#na#") {
-            print "<td align=\"center\">$moddate{\"$hlmap\"}</td>";
-        } else {
-            print "<td align=\"center\"><i>-</i></td>";
-        }
+        # Print map's modification date/time
+        ($seconds, $minutes, $hours, $day_of_month, $month, $year, $wday, $yday, $isdst) = localtime($moddate{"$hlmap"}); 
+        printf("<td align=\"center\">%04d/%02d/%02d - %02d:%02d:%02d</td>\n", 1900 + $year, $month, $day_of_month, $hours, $minutes, $seconds);
 
-        print "</tr>";
+        # End the table row
+        print "</tr>\n";
     }
 }
 
@@ -366,7 +375,7 @@ sub print_page_footer {
     print "<BR><CENTER><B>Total of $count maps found</B><BR><BR>";
     print "Generated by <a href=\"$HOME_PAGE\"><B>hlmaps.pl</B></a> $VERSION<BR>";
     print "Written by <a href=\"MAILTO:$AUTHOR_EMAIL\">$AUTHOR_NAME</a></CENTER><BR>";
-    print end_html;
+    print end_html . "\n";
 }
 
 ###############################################################################

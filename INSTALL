@@ -9,33 +9,54 @@
 # CVS $Id$
 ###############################################################################
 
-INSTALLING
-----------
+Install Images
+--------------
 First install all of the JPG images from the hlmaps_images package into a
-web-accessable directory.  If you already (or plan to) use the hlds_ld.cgi or
-hlstat.pl scripts then make all of them point to the same directory to make it
-better to maintain.
+web-accessable directory.  If you already (or plan to) use hlds_ld.cgi
+(available at http://linuxhlds.halflife.org/) or hlmon.pl (available at
+http://www.linuxquake.com/qsmon) then make all of them point to the same
+directory to make it simpler to maintain.
 
-The configuration part is a little more cumbersome than it will be in the
-next version, which will use a separate /etc/hlmaps.conf file.  But for now
-you need to edit the hlmaps.pl script and change the GLOBAL CONSTANTS section
-to match your installation.
+Modify and Copy Preferences
+---------------------------
+If this is a new installation, edit the hlmaps.conf.distrib file that came
+with the distribution to point to the paths and use the appearances you want.
+Then copy it to your /etc/ directory and assign appropriate owner, group and
+file permissions so that your web server can read it.  For example, I run my
+Apache daemon under an "httpd" user and an "httpd" group.  So I'd do the
+following:
 
-Then copy the hlmaps.pl script into your web server's cgi directory
+   cp hlmaps.conf.distrib /etc/hlmaps.conf
+   chown httpd.httpd /etc/hlmaps.conf
+   chmod 444 /etc/hlmaps.conf
+
+NOTE to NT testers: This script _may_ work with ActiveState's Perl for NT if
+you take out the "-T" on the first line of the script.
+
+If you're simply upgrading the script, you probably don't have to do the above
+depending on if there are any new variables you should have in your .conf
+file.  Check the CHANGELOG and compare your .conf with the distrib copy to
+make sure
+
+Copy the Actual Script
+----------------------
+Finally copy the hlmaps.pl script into your web server's cgi directory
 (usually /home/httpd/cgi-bin/) and assign it the same owner and group
 assignments and file permissions that you usually use for your other CGI
 scripts.  For example, I run my Apache daemon under an "httpd" user and an
-"httpd" group.  So I do the following:
+"httpd" group.  So I'd do the following:
 
-cp hlmaps.pl /home/httpd/cgi-bin/
-chown httpd.httpd /home/httpd/cgi-bin/hlmaps.pl
-chmod 555 /home/httpd/cgi-bin/hlmaps.pl
+   cp hlmaps.pl /home/httpd/cgi-bin/
+   chown httpd.httpd /home/httpd/cgi-bin/hlmaps.pl
+   chmod 555 /home/httpd/cgi-bin/hlmaps.pl
 
+Test and Troubleshoot
+---------------------
 Now fire up a browser and test the script by going to
 http://my.server.com/cgi-bin/hlmaps.pl and see if you get output.  If the images
-don't show up, then check the GLOBAL CONSTANTS settings.  If it doesn't find
-maps, then check the GLOBAL CONSTANTS settings.  If it doesn't detect mapcycle
-inclusion, then check the GLOBAL CONSTANTS settings.  Get it? :-)
+don't show up, then check the IMAGES_DIR and IMAGES_URL settings.  If it doesn't
+find maps, then check the SERVER_xxxx_DIR settings.  If it doesn't detect mapcycle
+inclusion, then check the MAPCYCLE setting.  Get it? :-)
 
 Let me know if you have problems AFTER you've checked things over several times
 and please be specific about what you see and what you've tried.  Im VERY
@@ -45,4 +66,3 @@ so please also let me know about your successes!
 --
 Hope you enjoy!
 Scott and the HLmaps development team.
-

@@ -13,10 +13,27 @@
 - bugfix, + enhancement, * contrib, = RELEASE
 ---------------------------------------------
 
+= 0.92 07/22/2000
+  - Fixed problem where a DOS-edited mapcycle with carriage returns would
+    prevent HLmaps from understanding it correctly.  Should work fine now.
+  - Now only using Perl-internal dir and file access functions instead of the
+    kludgy "ls" that I was using.  Should make porting to NT easier.
+  + HLmaps now uses a separate /etc/hlmaps.conf file for more flexible editing
+    of preferences and easier script upgrades.  Note that users running mult-
+    iple instances of HLmaps on the same system will want to edit the script's
+    $CONF_FILE variables to point to seperate hlmaps.conf files.
+  + The INSTALL file was updated with the new procedures now that we have a
+    separate hlmaps.conf file.
+  + User can now sort by map modification date/time.
+  + Imported project into SourceForge's CVS repository.
+  + Again tested OK with Apache/mod_perl's "PerlRun" compatability mode.
+    This is now part of my standard testing procedures and is probably as far
+    as I'll ever get to true mod_perl unless someone want to help.
+
 = 0.91 07/21/2000
   - Fixed problem where cat | grep could only handle up to 1500 line files
-    by using Perl internal file access -- Glen Muras
+    by using Perl internal file access -- Glen Muras.
   + Tested OK with Apache/mod_perl's "PerlRun" compatability mode.
 
 = 0.90 07/20/2000 -- Scott (smccrory@users.syshealth.net)
-  First public release
+  First public release.

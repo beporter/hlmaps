@@ -13,19 +13,16 @@ Please help!
 ------------------------------------
 
 Structure:
-  - Implement central hlmaps.conf file with all variables, including internationalization
   - Add support for MySQL (periodic data collection and db-served web page queries)?
 
 Installation:
   - Create installation script?
 
 Documentation:
-  - Improve installation instructions
   - Internationalize documentation (Spanish, German, French)
 
 Display, Graphics and Output:
   - Continuously add more HL mod map images
-  - Convert all images to be interlaced for low-bandwidth viewers
   - Add option to restrict number of maps displayed per page for faster page loads
   - Internationalize output (Spanish, German, French) using .conf options
   

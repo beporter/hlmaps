@@ -15,6 +15,7 @@
 SERVER_BASE_DIR     = /usr/bin/half-life/cstrike/
 SERVER_MAP_DIR      = /usr/bin/half-life/cstrike/maps/
 SERVER_LOG_DIR      = /usr/bin/half-life/cstrike/logs/
+MAP_EXTENSION       = bsp
 MAPCYCLE            = /usr/bin/half-life/cstrike/mapcycle.txt
 
 # Image file constants
@@ -30,7 +31,7 @@ DOWNLOAD_URL        = /download/Games/cstrike/maps/
 #                     Yellow Olive Green Blue Navy Teal Aqua
 #
 PAGE_HEADING        = HLmaps Server Map Listing
-PAGE_BG_IMG         = 
+PAGE_BG_URL         = 
 PAGE_BG_COLOR       = Black 
 PAGE_TEXT_COLOR     = Yellow
 PAGE_LINK_COLOR     = Lime
