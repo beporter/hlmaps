@@ -1,5 +1,13 @@
-# This file is for development only - it's to make it easy to test
-# major code revisions for compile errors.
+###############################################################################
+#                                                                             #
+# test.sh - This file is fto make it easy to test for compile errors          #
+#        - Copyright Scott McCrory as part of the HLmaps distribution         #
+#        - Distributed under the GNU Public License - see docs for more info  #
+#        - http://hlmaps.sourceforge.net                                      #
+#                                                                             #
+###############################################################################
+# CVS $Id$
+###############################################################################
 
 clear
 

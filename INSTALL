@@ -19,8 +19,9 @@ First install all of the JPG images from the hlmaps_images package available
 at http://sourceforge.net/project/filelist.php?group_id=8280 into a
 web-accessable directory.  If you already (or plan to) use hlds_ld.cgi
 (available at http://linuxhlds.halflife.org/) or hlmon.pl (available at
-http://www.linuxquake.com/qsmon) then make all of them point to the same
-directory to make all simpler to maintain.
+http://www.linuxquake.com/qsmon) or cssserverstat (available at
+http://www.amateur-hour.net/discus/messages/695/695.html) then make all of
+them point to the same directory to make all simpler to maintain.
 
 Modify and Copy Preferences
 ---------------------------
