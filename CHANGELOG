@@ -13,7 +13,10 @@
 - bugfix, + enhancement, * contrib, = RELEASE
 ---------------------------------------------
 
-= 0.95 09/25/2000
+= 0.95 09/24/2000
+  + Added optional MySQL support as the storage medium for the interrim data.
+    This should give others the ability to write applications which will use
+    the data collected by hlmaps.cron.  Go to it developers!
   - Fixed bug where default maps/page wasn't being read (handled) correctly
     from hlmaps.conf file.
   - Improved resilience to mapcycle.txt files that have extra (DOS) characters
@@ -21,17 +24,6 @@
   - Fixed problem with number of pages calculation.  If the number of maps div
     by the maps per page equaled an even number, we'd add a blank page to the
     end.  Not anymore, thanks to Jon Adams!
-  + Implemented optional kill thresholds for map popularity count calculation.
-    This is to allow admins to discount maps that had fewer than a certain
-    number of kills to help elminate maps that didn't have much *real* activity
-    on them.
-  + Added optional MySQL support as the storage medium for the interrim data.
-    This should give others the ability to write applications which will use
-    the data collected by hlmaps.cron.  Go to it developers!
-  + Added option to display which map is currently in play using code from Rod
-    May's excellent kkrcon.pl script.
-  + Added a link to hlds_ld.cgi or csserverstats, etc. for real-time server
-    status screen. 
 
 = 0.94 08/05/2000
   * Thanks to Justin Harris, Matthew McClendon and Matt Chambers for many

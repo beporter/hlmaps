@@ -44,7 +44,7 @@ my $CONF_FILE           = "/etc/hlmaps.conf";
 ###################### GLOBAL DEVELOPMENT CONSTANTS ###########################
 
 # Development constants - please don't mess with these
-my $VERSION             = "0.95, September 1, 2000";
+my $VERSION             = "0.95, September 24, 2000";
 my $AUTHOR_NAME         = "Scott McCrory";
 my $AUTHOR_EMAIL        = "smccrory\@users.sourceforge.net";
 my $HOME_PAGE           = "http://hlmaps.sourceforge.net";
@@ -279,7 +279,7 @@ sub get_mysql_map_details {
     $sth->execute () or mysql_bail_out ("Cannot execute query from table '$prefs{MYSQL_TABLE}'");
  
     # Read results of query
-    while (($l_mapname,$l_textfile,$l_download,$l_image,$l_popularity,$l_mapcycle,$l_size,$l_moddate) = $sth->fetchrow_array ()) {
+    while (($l_mapname,$l_image,$l_download,$l_textfile,$l_popularity,$l_mapcycle,$l_size,$l_moddate) = $sth->fetchrow_array ()) {
        $mapname{$l_mapname}    = $l_mapname;
        $textfile{$l_mapname}   = $l_textfile;
        $download{$l_mapname}   = $l_download;

@@ -39,15 +39,15 @@ sortable table.
 HLmaps should be pretty safe to use, as I've implemented Perl's "warn" and
 "taint" modes (although NT ActiveState Perl users may need to remove the -T).
 Processing loads are not very noticable now that we're using a scheduled job
-to parse the logs into an interrim file or optional MySQL database.  In
-addition, the run-time CGI script gets its info from this file/database when
-displaying the output to the user.
+to parse the logs into an interrim file or optional MySQL database, and the
+run-time CGI script gets its info from this file/database when displaying the
+output to the user.
 
 REQUIRES
 --------
   + Linux, FreeBSD or WinNT
-  + Perl 5.0+  (Ships with nearly every *nix distribution) or ActiveState's Perl
-       for WinNT)
+  + Perl 5.0+  (Ships with nearly every *nix distribution) or ActiveState's
+    Perl for WinNT)
   + Web server supporting CGI (Apache extensively tested)
   + MySQL if you optionally want to use a database as the interrim data store
   + Half-Life Server software (well duh!)

@@ -5,47 +5,23 @@ HLmaps.vpj=20000902142232000
 [ProjectFiles]
 HLmaps.vpj
 [TreeExpansion]
-HLmaps.vpj 1 1 0 0 0 0
+HLmaps.vpj 1 0 0 1 1 0
 [State]
-SCREEN: 1024 768 0 0 768 537 0 0 M 0 0 0 0 1020 644
+SCREEN: 1024 768 0 0 768 537 0 0 M 0 0 0 0 792 614
 CWD: F:\home\sources\hlmaps
 BUFFER: BN="F:\home\sources\hlmaps\CHANGELOG"
 BI: MA=1 74 1  TABS=1 5  WWS=1 IWT=0 ST=0 IN=1 BW=0 US=32000 RO=0 SE=1 SN=0 BIN=0 MN=Fundamental	HM=0 MF=0 TL=0 MLL=0 ASE=0 LNL=6 LCF=0 CAPS=0
-VIEW: LN=.929 CL=8 LE=0 CX=7 CY=16 WI=5 BI=7 HT=0 HN=0 HF=0 HC=4
-BUFFER: BN="F:\home\sources\hlmaps\CONTRIBUTING"
-BI: MA=1 74 1  TABS=1 5  WWS=1 IWT=0 ST=0 IN=1 BW=0 US=32000 RO=0 SE=1 SN=0 BIN=0 MN=Fundamental	HM=0 MF=0 TL=0 MLL=0 ASE=0 LNL=6 LCF=0 CAPS=0
-VIEW: LN=.852 CL=27 LE=0 CX=26 CY=14 WI=5 BI=10 HT=0 HN=0 HF=0 HC=4
-BUFFER: BN="F:\home\sources\hlmaps\CONTRIBUTORS"
-BI: MA=1 74 1  TABS=1 5  WWS=1 IWT=0 ST=0 IN=1 BW=0 US=32000 RO=0 SE=1 SN=0 BIN=0 MN=Fundamental	HM=0 MF=0 TL=0 MLL=0 ASE=0 LNL=6 LCF=0 CAPS=0
-VIEW: LN=.1509 CL=26 LE=0 CX=25 CY=13 WI=5 BI=12 HT=0 HN=0 HF=0 HC=4
-BUFFER: BN="F:\home\sources\hlmaps\hlmaps.conf.distrib"
-BI: MA=1 74 1  TABS=1 5  WWS=1 IWT=0 ST=0 IN=1 BW=0 US=32000 RO=0 SE=1 SN=0 BIN=0 MN=Fundamental	HM=0 MF=0 TL=0 MLL=0 ASE=0 LNL=6 LCF=0 CAPS=0
-VIEW: LN=.3250 CL=14 LE=0 CX=13 CY=13 WI=5 BI=11 HT=0 HN=0 HF=0 HC=4
-BUFFER: BN="F:\home\sources\hlmaps\hlmaps.cron"
-BI: MA=1 74 1  TABS=1 5  WWS=1 IWT=0 ST=0 IN=2 BW=0 US=32000 RO=0 SE=1 SN=0 BIN=0 MN=Perl	HM=0 MF=0 TL=0 MLL=0 ASE=0 LNL=6 LCF=2 CAPS=0
-VIEW: LN=.15549 CL=1 LE=0 CX=0 CY=13 WI=5 BI=13 HT=0 HN=0 HF=0 HC=4
-WINDOW: 0 0 822 446 -1 -1 N  WF=0 WT=2 "QuickType Mono,10,0,1"
+VIEW: LN=.0 CL=1 LE=0 CX=0 CY=1 WI=5 BI=13 HT=0 HN=0 HF=0 HC=4
+WINDOW: 0 0 594 416 -1 -1 M  WF=0 WT=2 "QuickType Mono,10,0,1"
 BUFFER: BN="F:\home\sources\hlmaps\CHANGELOG"
-VIEW: LN=.929 CL=8 LE=0 CX=7 CY=16 WI=41 BI=7 HT=0 HN=0 HF=0 HC=4
-WINDOW: 22 22 822 446 -1 -1 N  WF=0 WT=3 "QuickType Mono,10,0,1"
-BUFFER: BN="F:\home\sources\hlmaps\CONTRIBUTING"
-VIEW: LN=.852 CL=27 LE=0 CX=26 CY=14 WI=42 BI=10 HT=0 HN=0 HF=0 HC=4
-WINDOW: 44 44 822 446 -1 -1 N  WF=0 WT=4 "QuickType Mono,10,0,1"
-BUFFER: BN="F:\home\sources\hlmaps\CONTRIBUTORS"
-VIEW: LN=.1509 CL=26 LE=0 CX=25 CY=13 WI=40 BI=12 HT=0 HN=0 HF=0 HC=4
-WINDOW: 66 66 822 446 -1 -1 N  WF=0 WT=5 "QuickType Mono,10,0,1"
-BUFFER: BN="F:\home\sources\hlmaps\hlmaps.conf.distrib"
-VIEW: LN=.3250 CL=14 LE=0 CX=13 CY=13 WI=43 BI=11 HT=0 HN=0 HF=0 HC=4
-WINDOW: 88 88 822 446 -1 -1 N  WF=0 WT=6 "QuickType Mono,10,0,1"
-BUFFER: BN="F:\home\sources\hlmaps\hlmaps.cron"
-VIEW: LN=.15549 CL=1 LE=0 CX=7 CY=13 WI=29 BI=13 HT=0 HN=0 HF=0 HC=4
+VIEW: LN=.5777 CL=25 LE=0 CX=24 CY=38 WI=114 BI=13 HT=0 HN=0 HF=0 HC=4
 FILEHIST: 9
-F:\home\sources\hlmaps\hlmaps.PRJ
+F:\home\sources\hlmaps\hlmaps.cron
+F:\home\sources\hlmaps\hlmaps.pl
 F:\home\sources\hlmaps\hlmaps_create_db.sql
 F:\home\sources\hlmaps\INSTALL
-F:\home\sources\hlmaps\LICENSE
+F:\home\sources\hlmaps\INSTALL.MySQL
 F:\home\sources\hlmaps\make_distrib.sh
 F:\home\sources\hlmaps\README
-F:\home\sources\hlmaps\test.sh
 F:\home\sources\hlmaps\TODO
-F:\home\sources\hlmaps\hlmaps.pl
+F:\home\sources\hlmaps\CHANGELOG

@@ -23,7 +23,7 @@ my $CONF_FILE           = "/etc/hlmaps.conf";
 ###################### GLOBAL DEVELOPMENT CONSTANTS ###########################
 
 # Development constants - please don't mess with these
-my $VERSION             = "0.95, September 1, 2000";
+my $VERSION             = "0.95, September 24, 2000";
 my $AUTHOR_NAME         = "Scott McCrory";
 my $AUTHOR_EMAIL        = "smccrory\@users.sourceforge.net";
 my $HOME_PAGE           = "http://hlmaps.sourceforge.net";
@@ -319,7 +319,7 @@ sub output_mysql_data {
     # Now write all the (sorted) details out to the database
     @sortkeys = sort { $mapname{$a} cmp $mapname{$b} } keys %mapname;
     foreach $hlmap (@sortkeys) {
-       $sth = $dbh->prepare ("INSERT $prefs{MYSQL_TABLE} ($prefs{MYSQL_MAPNAME_FIELD},$prefs{MYSQL_IMAGEURL_FIELD},$prefs{MYSQL_DOWNLOAD_FIELD},$prefs{MYSQL_TEXTFILE_FIELD},$prefs{MYSQL_POPULARITY_FIELD},$prefs{MYSQL_MAPCYCLE_FIELD},$prefs{MYSQL_SIZE_FIELD},$prefs{MYSQL_MODDATE_FIELD}) VALUES('$mapname{$hlmap}','$textfile{$hlmap}','$download{$hlmap}','$image{$hlmap}','$popularity{$hlmap}','$mapcycle{$hlmap}','$size{$hlmap}','$moddate{$hlmap}')") or mysql_bail_out ("Cannot prepare to insert record into table '$prefs{MYSQL_TABLE}'");
+       $sth = $dbh->prepare ("INSERT $prefs{MYSQL_TABLE} ($prefs{MYSQL_MAPNAME_FIELD},$prefs{MYSQL_IMAGEURL_FIELD},$prefs{MYSQL_DOWNLOAD_FIELD},$prefs{MYSQL_TEXTFILE_FIELD},$prefs{MYSQL_POPULARITY_FIELD},$prefs{MYSQL_MAPCYCLE_FIELD},$prefs{MYSQL_SIZE_FIELD},$prefs{MYSQL_MODDATE_FIELD}) VALUES('$mapname{$hlmap}','$image{$hlmap}','$download{$hlmap}','$textfile{$hlmap}','$popularity{$hlmap}','$mapcycle{$hlmap}','$size{$hlmap}','$moddate{$hlmap}')") or mysql_bail_out ("Cannot prepare to insert record into table '$prefs{MYSQL_TABLE}'");
        $sth->execute () or mysql_bail_out ("Cannot execute command to insert record into table '$prefs{MYSQL_TABLE}' with map '$mapname{$hlmap}'");
     }
 
