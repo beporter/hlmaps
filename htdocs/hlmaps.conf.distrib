@@ -1,0 +1,135 @@
+###############################################################################
+#                                                                             #
+# hlmaps.conf.distrib   - The configuration file for HLmaps                   #
+#                       - Copyright Scott McCrory                             #
+#                       - Distributed under the GPL terms - see docs for info #
+#                       - http://hlmaps.sourceforge.net                       #
+#                                                                             #
+###############################################################################
+# CVS $Id$
+###############################################################################
+#
+# **   MODIFY THESE FOR YOUR SYSTEM    **
+# ** Everything after a "#" is ignored **
+#
+#-----------------------------------------------------------------------------
+# Half-Life server constants - remember trailing "/" or "\" on DIRs and URLs!
+SERVER_BASE_DIR             = /usr/bin/half-life/cstrike/
+SERVER_MAP_DIR              = /usr/bin/half-life/cstrike/maps/
+SERVER_LOG_DIR              = /usr/bin/half-life/cstrike/logs/
+SERVER_LOG_SPAWN_MSG        = Loading map
+MAP_EXTENSION               = bsp
+MAPCYCLE                    = /usr/bin/half-life/cstrike/mapcycle.txt
+
+# If you're using a real-time server status program like csserverstat, hlds_ld,
+#    or hlmon.pl then put the URL for it here, otherwise make it null
+#REALTIME_STATUS_URL         = /cgi-bin/csserverstat.pl
+REALTIME_STATUS_URL       =
+
+# Thanks to code from Rod May's kkrcon.pl, we can tell you which map is playing
+#    if you specify these three bits of information for us
+SERVER                      = 
+PORT                        = 27015
+PASS                        = password
+
+# Maps which exist _inside_ of the mod (i.e. which don't have a .bsp file)
+#    Someone please tell me what others are or if these get changed!
+# CSTRIKE:    BUILT_IN_MAPS =
+# VALVE:      BUILT_IN_MAPS = datacore:stalkyard:undertow:subtransit:snark_pit:boot_camp:lambda_bunker:gasworks:frenzy:bounce
+# TFC:        BUILT_IN_MAPS = 2fort:well:rock2:cz2:hunted:push:badlands:crossover2:dustbowl:warpath:epicenter
+# SI:         BUILT_IN_MAPS = si_alley:si_laser:si_colony:si_moon:si_hirise:si_metropolis:si_military:si_tundra
+BUILT_IN_MAPS               =
+
+# Ignore all map runs with fewer than this many kills.  A value of 0 will
+#    count all map runs, where 1 will only count ones with 1 or more kills,
+#    etc.  Note that 0 is fastest during .cron runs.
+MAP_KILL_THRESHOLD          = 1
+
+#-----------------------------------------------------------------------------
+# Image file constants - remember trailing "/" or "\" on DIRs and URLs!
+IMAGES_DIR                  = /home/httpd/html/images/Maps/halflife/
+IMAGES_URL                  = /images/Maps/halflife/
+
+#-----------------------------------------------------------------------------
+# Download file constants - remember trailing "/" or "\" on DIRs and URLs!
+DOWNLOAD_DIR                = /home/ftp/pub/Games/cstrike/maps/
+DOWNLOAD_EXT                = zip
+DOWNLOAD_URL                = /download/Games/cstrike/maps/
+
+#-----------------------------------------------------------------------------
+# This is where hlmaps.cron puts it's data when it periodically collects it.
+#    It's also where hlmaps.pl will look for it's info when displaying output
+#    to web clients. It can either be a pathname to a read-write text file
+#    or "mysql" to use a database to hold the information (recommended for
+#    sites with tons of maps).  If you use MySQL then make sure the section
+#    below is also correct.
+#DATA_LOCATION              = mysql
+DATA_LOCATION               = /var/hlmaps.data
+
+#-----------------------------------------------------------------------------
+# These MySQL settings are only applicable if you set DATA_LOCATION = mysql
+#    above. If you did, then hlmaps.cron will put its data in the database and
+#    hlmaps.pl will look here for it's info when displaying output to web
+#    clients. Feel free to modify these if you want to rename the database or
+#    share it with another process. BUT don't add fields to the table specified
+#    because we DELETE and RE-CREATE it each time the cron script runs!!
+MYSQL_SERVER                = coffin.darktech.org
+MYSQL_DATABASE              = HLmaps
+MYSQL_USER                  = HLmaps
+MYSQL_PASSWORD              = HLmaps
+MYSQL_TABLE                 = maps
+MYSQL_MAPNAME_FIELD         = mapname
+MYSQL_IMAGEURL_FIELD        = imageurl
+MYSQL_DOWNLOAD_FIELD        = downloadurl
+MYSQL_TEXTFILE_FIELD        = textfile
+MYSQL_POPULARITY_FIELD      = popularity
+MYSQL_MAPCYCLE_FIELD        = mapcycle
+MYSQL_SIZE_FIELD            = size
+MYSQL_MODDATE_FIELD         = moddate
+
+#-----------------------------------------------------------------------------
+# Appearance preferences
+#    Valid colors are White Silver Grey Black Red Maroon Purple Fuschia Lime
+#                     Yellow Olive Green Blue Navy Teal Aqua
+#
+#PAGE_BG_URL                 = /images/hl_bg.jpg
+PAGE_BG_URL                 =           # Page background image relative URL
+PAGE_BG_COLOR               = Black     # Page background color
+PAGE_TEXT_COLOR             = Yellow    # Page text color
+PAGE_LINK_COLOR             = Lime      # Page link color
+PAGE_V_LINK_COLOR           = Aqua      # Page visited link color
+PAGE_A_LINK_COLOR           = Green     # Page link color
+TABLE_BORDER_LIGHT_COLOR    = Aqua      # Table light border color
+TABLE_BORDER_DARK_COLOR     = Green     # Table dark border color
+TABLE_NORM_HEAD_COLOR       = Navy      # Table normal head color
+TABLE_SORT_HEAD_COLOR       = Blue      # Table sorted head color
+DEFAULT_MAPS_PER_PAGE       = 25        # Default number of maps per page
+
+#-----------------------------------------------------------------------------
+# Language preferences - use these to internationalize HLmaps
+PAGE_HEADING                = HLmaps Server Map Listing
+PAGE_SUBHEADING             = Click the column headings to sort by them
+PAGE_MAPCOUNT_PRE           = Total of
+PAGE_MAPCOUNT_SUF           = maps found
+PAGE_DOWNLOAD               = Download this map
+PAGE_MAPS_PER_PAGE          = Maps Per Page
+PAGE_REFRESH                = Refresh
+
+TABLE_MAPNAME_COLUMN        = Map Name
+TABLE_IMAGE_COLUMN          = Image
+TABLE_POPULARITY_COLUMN     = Popularity
+TABLE_MAPCYCLE_COLUMN       = In Map Cycle
+TABLE_SIZE_COLUMN           = Size
+TABLE_MODDATE_COLUMN        = Mod Date
+
+TABLE_POPULARITY_COUNT_PRE  = Played
+TABLE_POPULARITY_COUNT_SUF  = time(s)
+TABLE_POPULARITY_NEVER      = Never Played
+TABLE_MAPCYCLE_YES          = In Map Cycle
+TABLE_MAPCYCLE_NO           = No
+
+# This can either be a phrase like "Image Not Available" or a URL to an image
+#TABLE_IMAGE_NO              = /images/Maps/halflife/cs_default.jpg
+TABLE_IMAGE_NO              = Image Not Available
+
+###############################################################################
