@@ -13,6 +13,22 @@
 - bugfix, + enhancement, * contrib, = RELEASE
 ---------------------------------------------
 
+= 1.0 10/23/2000
+  = I'm calling this 1.0 because it has all the features (and it looks like the
+    stability) of a 1.0 release.  Future work will most likely be aimed at bug
+    fixes and small enhancements.
+  + Integrated Rod May's kkrcon code to show which map is currently in play.
+    Also added integration with real-time stats programs like csserverstat.
+    The combination of these features means you can click on the map in play
+    and go to the real-time information for the server!
+  + Clicking on the single-map screen's map image will return the user to the
+    main maps list.
+  - Remarked out the "use DBI;" lines in hlmaps.pl and hlmaps.cron to quash
+    the error that non-DB users were getting.  If anyone knows how to properly
+    load DBI at runtime without warnings, please let me know.  As per the
+    INSTALL.MySQL file, DB users will now need to unremark these two lines.
+  - Cleaned up some code, comments and docs.
+
 = 0.95 09/24/2000
   + Added optional MySQL support as the storage medium for the interrim data.
     This should give others the ability to write applications which will use
