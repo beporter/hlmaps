@@ -77,7 +77,11 @@ $ENV{ENV} = '';             # Clear out another env to prevent sloppy code execu
 set_default_values();       # Fill in unspecified variables
 get_preferences();          # Load preferences from .conf file
 untaint_data();             # Perform validation of all input data
-get_map_details();          # Read HLmaps.data file or MySQL table for map details
+if ( $prefs{DATA_LOCATION} ne "mysql" ) {
+    get_text_map_details(); # Read HLmaps data from file
+} else {
+    get_mysql_map_details();# Read HLmaps data from MySQL database    
+}
 
 if ($params{"map"}) {
     print_single_map();     # Print the single-map screen
@@ -143,7 +147,8 @@ sub set_default_values {
     $prefs{MYSQL_SERVER}                = "localhost";
     $prefs{MYSQL_DATABASE}              = "HLmaps";
     $prefs{MYSQL_USER}                  = "HLmaps";
-    $prefs{MYSQL_PASSWORD}              = "readonly";
+    $prefs{MYSQL_PASSWORD}              = "HLmaps";
+    $prefs{MYSQL_TABLE}                 = "maps";
     $prefs{MYSQL_MAPNAME_FIELD}         = "mapname";
     $prefs{MYSQL_IMAGEURL_FIELD}        = "imageurl";
     $prefs{MYSQL_DOWNLOAD_FIELD}        = "downloadurl";
@@ -152,7 +157,7 @@ sub set_default_values {
     $prefs{MYSQL_MAPCYCLE_FIELD}        = "mapcycle";
     $prefs{MYSQL_SIZE_FIELD}            = "size";
     $prefs{MYSQL_MODDATE_FIELD}         = "moddate";
-    $params{"sort"}                     = "mapname";
+
     $params{"order"}                    = "a";
     $params{"page"}                     = "1";
     $count                              = "0";
@@ -206,7 +211,7 @@ sub untaint_data {
 }
 
 #------------------------------------------------------------------------------
-sub get_map_details {
+sub get_text_map_details {
     # Open up hlmaps.data file and pull out the map details
 
     my $l_mapname;
@@ -234,6 +239,67 @@ sub get_map_details {
         ++$count;                               # Increment the map counter
     }
     close(DATA);
+}
+#------------------------------------------------------------------------------
+sub get_mysql_map_details {
+    # Open up HLmaps database and pull out the map details
+
+    use DBI;
+
+    my $l_mapname;
+    my $l_textfile;
+    my $l_download;
+    my $l_image;
+    my $l_popularity;
+    my $l_mapcycle;
+    my $l_size;
+    my $l_moddate;
+    
+    # Set up database variables and handles
+    my ($dsn) = "DBI:mysql:$prefs{MYSQL_DATABASE}:$prefs{MYSQL_SERVER}";
+    my ($user_name) = $prefs{MYSQL_USER};
+    my ($password) = $prefs{MYSQL_PASSWORD};
+    my ($dbh, $sth);
+    my (@ary);
+    my (%attr) =
+    (
+        PrintError => 0,
+        RaiseError => 0
+    );
+    
+    # Connect to the database
+    $dbh = DBI->connect ($dsn, $user_name, $password, \%attr) or mysql_bail_out ("Cannot connect to server '$prefs{MYSQL_SERVER}' into database '$prefs{MYSQL_DATABASE}' with user '$prefs{MYSQL_USER}' and password '$prefs{MYSQL_PASSWORD}'");
+    
+    # Set active table
+    $sth = $dbh->prepare ("USE $prefs{MYSQL_DATABASE}") or mysql_bail_out ("Cannot use maps table '$prefs{MYSQL_TABLE}'");
+    $sth->execute () or mysql_bail_out ("Cannot execute command to use maps table '$prefs{MYSQL_TABLE}'");
+    
+    # Issue query to read all of the details from the database
+    $sth = $dbh->prepare ("SELECT $prefs{MYSQL_MAPNAME_FIELD},$prefs{MYSQL_IMAGEURL_FIELD},$prefs{MYSQL_DOWNLOAD_FIELD},$prefs{MYSQL_TEXTFILE_FIELD},$prefs{MYSQL_POPULARITY_FIELD},$prefs{MYSQL_MAPCYCLE_FIELD},$prefs{MYSQL_SIZE_FIELD},$prefs{MYSQL_MODDATE_FIELD} FROM $prefs{MYSQL_TABLE} ORDER BY $prefs{MYSQL_MAPNAME_FIELD}") or mysql_bail_out ("Cannot prepare query from table '$prefs{MYSQL_TABLE}'");
+    $sth->execute () or mysql_bail_out ("Cannot execute query from table '$prefs{MYSQL_TABLE}'");
+ 
+    # Read results of query
+    while (($l_mapname,$l_textfile,$l_download,$l_image,$l_popularity,$l_mapcycle,$l_size,$l_moddate) = $sth->fetchrow_array ()) {
+       $mapname{$l_mapname}    = $l_mapname;
+       $textfile{$l_mapname}   = $l_textfile;
+       $download{$l_mapname}   = $l_download;
+       $image{$l_mapname}      = $l_image;
+       $popularity{$l_mapname} = $l_popularity;
+       $mapcycle{$l_mapname}   = $l_mapcycle;
+       $size{$l_mapname}       = $l_size;
+       $moddate{$l_mapname}    = $l_moddate;
+       ++$count;                               # Increment the map counter
+    }
+    # Close the database and clean up
+    $sth->finish () or mysql_bail_out ("Cannot finish cleanup from database '$prefs{MYSQL_DATABASE}'");
+    $dbh->disconnect () or mysql_bail_out ("Cannot disconnect from database '$prefs{MYSQL_DATABASE}'");
+}
+
+#------------------------------------------------------------------------------
+sub mysql_bail_out {
+    # Print the full text error messages for any database problems  
+    my ($message) = shift;
+    die "$message\nError $DBI::err ($DBI::errstr)\n";
 }
 
 #------------------------------------------------------------------------------

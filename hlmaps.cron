@@ -49,10 +49,10 @@ get_map_details();          # Scan map dir and get details
 get_mapcycle();             # See if map is in mapcycle.txt
 get_map_popularity();       # See how many times map's been played
 
-if ( $prefs{DATA_LOCATION} eq "mysql" ) {
-    output_mysql_data();        
+if ( $prefs{DATA_LOCATION} ne "mysql" ) {
+   output_text_data();
 } else {
-    output_text_data();
+    output_mysql_data();        
 }
 
 ############################### SUBROUTINES ###################################
@@ -107,7 +107,8 @@ sub set_default_values {
     $prefs{MYSQL_SERVER}                = "localhost";
     $prefs{MYSQL_DATABASE}              = "HLmaps";
     $prefs{MYSQL_USER}                  = "HLmaps";
-    $prefs{MYSQL_PASSWORD}              = "readonly";
+    $prefs{MYSQL_PASSWORD}              = "HLmaps";
+    $prefs{MYSQL_TABLE}                 = "maps";
     $prefs{MYSQL_MAPNAME_FIELD}         = "mapname";
     $prefs{MYSQL_IMAGEURL_FIELD}        = "imageurl";
     $prefs{MYSQL_DOWNLOAD_FIELD}        = "downloadurl";
@@ -257,26 +258,6 @@ sub get_map_popularity {
 }
 
 #------------------------------------------------------------------------------
-sub output_mysql_data {
-    # Write the data collected to the MySQL database specified in the .conf file
-    
-    my $hlmap;          # The map we're working with in the loop
-    my @sortkeys;       # Which field we're going to sort by
-
-    # Sort by ascending mapname for human readability
-    @sortkeys = sort { $mapname{$a} cmp $mapname{$b} } keys %mapname;
-
-    # Open the database
-
-    # Now write them all out!
-    foreach $hlmap (@sortkeys) {
-
-    }
-
-    # Close the database
-} 
-
-#------------------------------------------------------------------------------
 sub output_text_data {
     # Write the data collected to the text file specified in the .conf file
 
@@ -299,4 +280,59 @@ sub output_text_data {
 
 }
     
+#------------------------------------------------------------------------------
+sub output_mysql_data {
+    # Write the data collected to the MySQL database specified in the .conf file
+    
+    use DBI;
+
+    my $hlmap;          # The map we're working with in the loop
+    my @sortkeys;       # Which field we're going to sort by
+
+    # Set up database variables and handles
+    my ($dsn) = "DBI:mysql:$prefs{MYSQL_DATABASE}:$prefs{MYSQL_SERVER}";
+    my ($user_name) = $prefs{MYSQL_USER};
+    my ($password) = $prefs{MYSQL_PASSWORD};
+    my ($dbh, $sth);
+    my (@ary);
+    my (%attr) =
+    (
+        PrintError => 0,
+        RaiseError => 0
+    );
+    
+    # Connect to the database
+    $dbh = DBI->connect ($dsn, $user_name, $password, \%attr) or mysql_bail_out ("Cannot connect to server '$prefs{MYSQL_SERVER}' into database '$prefs{MYSQL_DATABASE}' with user '$prefs{MYSQL_USER}' and password '$prefs{MYSQL_PASSWORD}'");
+    
+    # Drop existing table
+    $sth = $dbh->prepare ("DROP TABLE IF EXISTS $prefs{MYSQL_TABLE}") or mysql_bail_out ("Cannot prepare to drop existing table '$prefs{MYSQL_TABLE}'");
+    $sth->execute () or mysql_bail_out ("Cannot execute command to drop existing table '$prefs{MYSQL_TABLE}'");
+
+    # Create new table
+    $sth = $dbh->prepare ("CREATE TABLE $prefs{MYSQL_TABLE} ($prefs{MYSQL_MAPNAME_FIELD} VARCHAR(20) NOT NULL, $prefs{MYSQL_IMAGEURL_FIELD} VARCHAR(100), $prefs{MYSQL_DOWNLOAD_FIELD} VARCHAR(100), $prefs{MYSQL_TEXTFILE_FIELD} LONGTEXT, $prefs{MYSQL_POPULARITY_FIELD} INT UNSIGNED, $prefs{MYSQL_MAPCYCLE_FIELD} INT UNSIGNED, $prefs{MYSQL_SIZE_FIELD} INT UNSIGNED, $prefs{MYSQL_MODDATE_FIELD} INT UNSIGNED, PRIMARY KEY ($prefs{MYSQL_MAPNAME_FIELD}) )") or mysql_bail_out ("Cannot prepare to create maps table '$prefs{MYSQL_TABLE}'");
+    $sth->execute () or mysql_bail_out ("Cannot execute command to create maps table '$prefs{MYSQL_TABLE}'");
+    
+    # Set active table
+    $sth = $dbh->prepare ("USE $prefs{MYSQL_DATABASE}") or mysql_bail_out ("Cannot use maps table '$prefs{MYSQL_TABLE}'");
+    $sth->execute () or mysql_bail_out ("Cannot execute command to use maps table '$prefs{MYSQL_TABLE}'");
+    
+    # Now write all the (sorted) details out to the database
+    @sortkeys = sort { $mapname{$a} cmp $mapname{$b} } keys %mapname;
+    foreach $hlmap (@sortkeys) {
+       $sth = $dbh->prepare ("INSERT $prefs{MYSQL_TABLE} ($prefs{MYSQL_MAPNAME_FIELD},$prefs{MYSQL_IMAGEURL_FIELD},$prefs{MYSQL_DOWNLOAD_FIELD},$prefs{MYSQL_TEXTFILE_FIELD},$prefs{MYSQL_POPULARITY_FIELD},$prefs{MYSQL_MAPCYCLE_FIELD},$prefs{MYSQL_SIZE_FIELD},$prefs{MYSQL_MODDATE_FIELD}) VALUES('$mapname{$hlmap}','$textfile{$hlmap}','$download{$hlmap}','$image{$hlmap}','$popularity{$hlmap}','$mapcycle{$hlmap}','$size{$hlmap}','$moddate{$hlmap}')") or mysql_bail_out ("Cannot prepare to insert record into table '$prefs{MYSQL_TABLE}'");
+       $sth->execute () or mysql_bail_out ("Cannot execute command to insert record into table '$prefs{MYSQL_TABLE}' with map '$mapname{$hlmap}'");
+    }
+
+    # Close the database and clean up
+    $sth->finish () or mysql_bail_out ("Cannot finish database cleanup");
+    $dbh->disconnect () or mysql_bail_out ("Cannot disconnect from database");
+} 
+
+#------------------------------------------------------------------------------
+sub mysql_bail_out {
+    # Print the full text error messages for any database problems  
+    my ($message) = shift;
+    die "$message\nError $DBI::err ($DBI::errstr)\n";
+}
+
 ###############################################################################

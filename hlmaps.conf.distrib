@@ -52,8 +52,8 @@ DOWNLOAD_URL                = /download/Games/cstrike/maps/
 #    or "mysql" to use a database to hold the information (recommended for
 #    sites with tons of maps).  If you use MySQL then make sure the section
 #    below is also correct.
-#DATA_LOCATION              = mysql
-DATA_LOCATION               = /var/hlmaps.data
+DATA_LOCATION              = mysql
+#DATA_LOCATION               = /var/hlmaps.data
 
 #-----------------------------------------------------------------------------
 # These MySQL settings are only applicable if you set DATA_LOCATION = mysql
@@ -62,10 +62,10 @@ DATA_LOCATION               = /var/hlmaps.data
 #    clients. Feel free to modify these if you want to rename the database or
 #    share it with another process. BUT don't add fields to the table specified
 #    because we DELETE and RE_CREATE it each time the cron script runs!!
-MYSQL_SERVER                = localhost
+MYSQL_SERVER                = coffin.darktech.org
 MYSQL_DATABASE              = HLmaps
 MYSQL_USER                  = HLmaps
-MYSQL_PASSWORD              = readonly
+MYSQL_PASSWORD              = HLmaps
 MYSQL_TABLE                 = maps
 MYSQL_MAPNAME_FIELD         = mapname
 MYSQL_IMAGEURL_FIELD        = imageurl
