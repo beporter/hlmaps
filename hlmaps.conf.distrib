@@ -43,8 +43,8 @@ PAGE_V_LINK_COLOR           = Aqua
 PAGE_A_LINK_COLOR           = Green
 TABLE_BORDER_LIGHT_COLOR    = Aqua
 TABLE_BORDER_DARK_COLOR     = Green
-TABLE_NORM_HEAD_COLOR       = Purple
-TABLE_SORT_HEAD_COLOR       = Fuchsia
+TABLE_NORM_HEAD_COLOR       = Navy
+TABLE_SORT_HEAD_COLOR       = Blue
 
 #-----------------------------------------------------------------------------
 # Language preferences - use these to internationalize HLmaps

@@ -243,12 +243,49 @@ sub print_table_header {
     # Print the table header
     print "<table border=\"1\" bordercolordark=\"$prefs{TABLE_BORDER_LIGHT_COLOR}\" bordercolorlight=\"$prefs{TABLE_BORDER_DARK_COLOR}\" cellspacing=\"0\" cellpadding=\"3\" align=\"center\">";
     print "<tr>";     
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapname&order=$inverse\"><b>$prefs{TABLE_MAPNAME_COLUMN}</b></a></td>\n";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=image&order=$inverse\"><b>$prefs{TABLE_IMAGE_COLUMN}</b></a></td>\n";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=popularity&order=$inverse\"><b>$prefs{TABLE_POPULARITY_COLUMN}</b></a></td>\n";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=mapcycle&order=$inverse\"><b>$prefs{TABLE_MAPCYCLE_COLUMN}</b></a></td>\n";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=size&order=$inverse\"><b>$prefs{TABLE_SIZE_COLUMN}</b></a></td>\n";
-    print "<td align=\"center\"><a href=\"$SCRIPT_NAME?sort=moddate&order=$inverse\"><b>$prefs{TABLE_MODDATE_COLUMN}</b></a></td>\n";
+    
+    if ($params{"sort"} eq "mapname" ) {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_SORT_HEAD_COLOR} >";
+    } else {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_NORM_HEAD_COLOR} >";
+    }
+    print "<a href=\"$SCRIPT_NAME?sort=mapname&order=$inverse\"><b>$prefs{TABLE_MAPNAME_COLUMN}</b></a></td>\n";
+
+    if ($params{"sort"} eq "image" ) {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_SORT_HEAD_COLOR} >";
+    } else {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_NORM_HEAD_COLOR} >";
+    }
+    print "<a href=\"$SCRIPT_NAME?sort=image&order=$inverse\"><b>$prefs{TABLE_IMAGE_COLUMN}</b></a></td>\n";
+
+    if ($params{"sort"} eq "popularity" ) {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_SORT_HEAD_COLOR} >";
+    } else {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_NORM_HEAD_COLOR} >";
+    }
+    print "<a href=\"$SCRIPT_NAME?sort=popularity&order=$inverse\"><b>$prefs{TABLE_POPULARITY_COLUMN}</b></a></td>\n";
+
+    if ($params{"sort"} eq "mapcycle" ) {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_SORT_HEAD_COLOR} >";
+    } else {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_NORM_HEAD_COLOR} >";
+    }
+    print "<a href=\"$SCRIPT_NAME?sort=mapcycle&order=$inverse\"><b>$prefs{TABLE_MAPCYCLE_COLUMN}</b></a></td>\n";
+
+    if ($params{"sort"} eq "size" ) {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_SORT_HEAD_COLOR} >";
+    } else {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_NORM_HEAD_COLOR} >";
+    }
+    print "<a href=\"$SCRIPT_NAME?sort=size&order=$inverse\"><b>$prefs{TABLE_SIZE_COLUMN}</b></a></td>\n";
+
+    if ($params{"sort"} eq "moddate" ) {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_SORT_HEAD_COLOR} >";
+    } else {
+        print "<td align=\"center\" BGCOLOR=$prefs{TABLE_NORM_HEAD_COLOR} >";
+    }
+    print "<a href=\"$SCRIPT_NAME?sort=moddate&order=$inverse\"><b>$prefs{TABLE_MODDATE_COLUMN}</b></a></td>\n";
+
     print "</tr>\n";
 }
 
